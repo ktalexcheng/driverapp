@@ -44,14 +44,15 @@ class RideActivityCubit extends Cubit<RideActivityState> {
         id: null,
         rideName: rideName,
         rideDate: DateTime.now(),
-        rideData: rideDataRepository.rideData.rideData,
+        rideData: rideDataRepository.rideData.data,
       );
 
       await driverAppDBClient.saveRideData(ride);
 
       emit(RideActivityState(
-          status: RideActivityStatus.ready,
-          rideData: rideDataRepository.rideData));
+        status: RideActivityStatus.ready,
+        newSensorData: rideDataRepository.rideData.last,
+      ));
     }
   }
 
@@ -74,7 +75,8 @@ class RideActivityCubit extends Cubit<RideActivityState> {
       (event) {
         emit(RideActivityState(
           status: RideActivityStatus.running,
-          rideData: rideDataRepository.rideData,
+          newSensorData: rideDataRepository.rideData.last,
+          elapsedSeconds: rideDataRepository.elapsedSeconds,
         ));
       },
     );

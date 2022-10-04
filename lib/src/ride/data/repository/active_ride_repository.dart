@@ -71,6 +71,7 @@ class ActiveRideRepository {
 
   double? lastLocationLat;
   double? lastLocationLong;
+  Duration elapsedSeconds = const Duration();
 
   void addDataToRide() {
     if (_dataBuffer.ifBufferFull()) {
@@ -85,6 +86,7 @@ class ActiveRideRepository {
         locationLat: lastLocationLat,
         locationLong: lastLocationLong,
       );
+      elapsedSeconds = DateTime.now().difference(sensorData.timestamp);
       rideDataStreamController.add(sensorData);
       rideData.addData(sensorData);
       _dataBuffer = _SensorDataBuffer();

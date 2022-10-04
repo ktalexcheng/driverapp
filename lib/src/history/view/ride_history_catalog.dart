@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:driverapp/src/history/bloc/bloc.dart';
+import 'package:driverapp/src/history/view/widget/widget.dart';
 
 class RideHistoryCatalog extends StatelessWidget {
   const RideHistoryCatalog({super.key});
@@ -10,20 +11,28 @@ class RideHistoryCatalog extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RideHistoryBloc, RideHistoryState>(
       builder: (context, state) {
-        if (state is RideHistoryGetCatalogSuccess) {
+        if (state is RideHistoryInitial) {
+          return const Text("Welcome!");
+        } else if (state is RideHistoryGetCatalogInProgress) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is RideHistoryGetCatalogSuccess) {
           return ListView.builder(
+            padding: const EdgeInsets.all(10),
             itemCount: state.rideCatalog.length,
             // prototypeItem: ListTile(
             //   title: Text(state.rideHistory.first.rideName),
             // ),
             itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(state.rideCatalog[index].rideName),
+              return RideHistoryPreviewCard(
+                rideName: state.rideCatalog[index].rideName,
+                rideDate: state.rideCatalog[index].rideDate,
               );
             },
           );
         } else {
-          return Container();
+          return const Text("UNEXPECTED!");
         }
       },
     );

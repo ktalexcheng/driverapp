@@ -11,7 +11,7 @@ class Ride with RideMetaMixin, RideDataMixin {
     super.id = id;
     super.rideName = rideName;
     super.rideDate = rideDate;
-    super.rideData = rideData;
+    super.data = rideData;
   }
 
   factory Ride.fromJson(Map<String, dynamic> json) {
@@ -34,7 +34,7 @@ class Ride with RideMetaMixin, RideDataMixin {
   Map<String, dynamic> toJson() {
     List<Map<String, dynamic>> _jsonList = [];
 
-    for (var element in rideData) {
+    for (var element in data) {
       _jsonList.add(element.toJson());
     }
 

@@ -26,6 +26,13 @@ class DriverAppHomePage extends StatelessWidget {
           title: const Text('DriverApp'),
         ),
         body: BlocBuilder<AppNavigationCubit, AppNavigationState>(
+          buildWhen: (previous, current) {
+            if (previous != current) {
+              return true;
+            } else {
+              return false;
+            }
+          },
           builder: (context, state) {
             if (state is AppNavigationInitial ||
                 state is AppNavigationLoadHistorySuccess) {
@@ -39,7 +46,7 @@ class DriverAppHomePage extends StatelessWidget {
                   .read<RideHistoryBloc>()
                   .add(RideHistoryLastRideDataRequested());
 
-              return const RideActivityPage();
+              return const RideActivityHome();
             } else {
               return const RideHistoryCatalog();
             }

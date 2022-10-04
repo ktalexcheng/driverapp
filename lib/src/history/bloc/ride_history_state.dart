@@ -13,6 +13,11 @@ class RideHistoryInitial extends RideHistoryState {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
+class RideHistoryGetCatalogInProgress extends RideHistoryState {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 class RideHistoryGetCatalogSuccess extends RideHistoryState {
   RideHistoryGetCatalogSuccess({
     required this.rideCatalog,
@@ -31,6 +36,11 @@ class RideHistoryGetCatalogSuccess extends RideHistoryState {
     }
   }
 
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class RideHistoryGetLastRideInProgress extends RideHistoryState {
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

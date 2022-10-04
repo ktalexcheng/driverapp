@@ -19,6 +19,8 @@ class RideHistoryBloc extends Bloc<RideHistoryEvent, RideHistoryState> {
 
   Future<void> _onRideCatalogRequested(
       RideHistoryEvent event, Emitter<RideHistoryState> emit) async {
+    emit(RideHistoryGetCatalogInProgress());
+
     allRides = await driverAppDBClient.fetchRideCatalog();
 
     emit(RideHistoryGetCatalogSuccess(rideCatalog: allRides));
@@ -27,6 +29,7 @@ class RideHistoryBloc extends Bloc<RideHistoryEvent, RideHistoryState> {
   Future<void> _onLastRideDataRequested(
       RideHistoryEvent event, Emitter<RideHistoryState> emit) async {
     List<RideMeta> allRides = await driverAppDBClient.fetchRideCatalog();
+    emit(RideHistoryGetLastRideInProgress());
 
     bool historyFound = allRides.isNotEmpty ? true : false;
 

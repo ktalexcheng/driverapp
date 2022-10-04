@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
 class RideAnalysisMetric extends StatelessWidget {
-  const RideAnalysisMetric(
-      {super.key, required this.title, required this.body});
+  const RideAnalysisMetric({
+    super.key,
+    required this.title,
+    required this.body,
+  });
 
   final String title;
   final String body;

@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import 'package:driverapp/src/analysis/view/view.dart';
 import 'package:driverapp/src/history/history.dart';
@@ -13,11 +13,20 @@ class RideAnalysisResults extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RideHistoryBloc, RideHistoryState>(
       builder: (context, state) {
-        if (state is RideHistoryGetLastRideSuccess) {
+        if (state is RideHistoryGetLastRideInProgress) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is RideHistoryGetLastRideSuccess) {
           return Column(
             children: [
-              Text('Ride name: ${state.fetchedRide.rideName}'),
-              Text('Ride date: ${state.fetchedRide.rideDate.toString()}'),
+              Text(
+                state.fetchedRide.rideName,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(DateFormat.yMMMd()
+                  .add_jms()
+                  .format(state.fetchedRide.rideDate)),
               GridView.count(
                 crossAxisCount: 3,
                 shrinkWrap: true,
@@ -40,6 +49,10 @@ class RideAnalysisResults extends StatelessWidget {
                   RideAnalysisMetric(
                     title: "Average speed (km/h):",
                     body: state.fetchedRide.avgSpeed.toStringAsFixed(1),
+                  ),
+                  RideAnalysisMetric(
+                    title: "Average moving speed (km/h):",
+                    body: state.fetchedRide.avgMovingSpeed.toStringAsFixed(1),
                   ),
                   RideAnalysisMetric(
                     title: "Average acceleration (g):",

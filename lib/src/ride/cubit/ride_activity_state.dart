@@ -5,11 +5,14 @@ enum RideActivityStatus { ready, running, paused, saving }
 class RideActivityState {
   RideActivityState({
     required this.status,
-    rideData,
+    newSensorData,
+    elapsedSeconds,
   }) {
-    this.rideData = rideData ?? RideData();
+    this.newSensorData = newSensorData ?? SensorData();
+    this.elapsedSeconds = elapsedSeconds ?? const Duration();
   }
 
   RideActivityStatus status;
-  late RideData rideData;
+  late SensorData newSensorData;
+  late Duration elapsedSeconds;
 }

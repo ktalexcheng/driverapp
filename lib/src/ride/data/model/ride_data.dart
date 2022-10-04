@@ -7,9 +7,9 @@ import 'package:driverapp/src/ride/data/model/model.dart';
 class RideData with RideDataMixin {
   RideData({rideData}) {
     if (rideData is List<SensorData>) {
-      super.rideData = rideData;
+      super.data = rideData;
     } else {
-      super.rideData = <SensorData>[];
+      super.data = <SensorData>[];
     }
   }
 
@@ -27,7 +27,7 @@ class RideData with RideDataMixin {
   List<Map<String, dynamic>> toJson() {
     List<Map<String, dynamic>> _jsonList = [];
 
-    for (var element in rideData) {
+    for (var element in data) {
       _jsonList.add(element.toJson());
     }
 
@@ -36,10 +36,10 @@ class RideData with RideDataMixin {
 }
 
 mixin RideDataMixin {
-  late List<SensorData> rideData;
+  late List<SensorData> data;
 
   void addData(SensorData datum) {
-    rideData.add(datum);
+    data.add(datum);
   }
 
   // Metrics calculation
@@ -47,17 +47,21 @@ mixin RideDataMixin {
   Duration get duration => _calcDuration();
   double get distance => _calcDistance();
   double get avgSpeed => _calcAvgSpeed();
+  double get avgMovingSpeed => _calcAvgMovingSpeed();
   double get avgAbsAcceleration => _calcAvgAbsAcceleration();
   double get maxAbsAcceleration => _calcMaxAbsAcceleration();
   double get stdDevAcceleration => _calcStdDevAcceleration();
+  int get length => data.length;
+  SensorData get first => data.first;
+  SensorData get last => data.last;
 
   static double gravity = 9.8;
 
   int _calcObservations() {
     int obs = 0;
 
-    if (rideData.isNotEmpty) {
-      obs = rideData.length;
+    if (data.isNotEmpty) {
+      obs = data.length;
     }
 
     return obs;
@@ -66,9 +70,9 @@ mixin RideDataMixin {
   Duration _calcDuration() {
     Duration duration = const Duration();
 
-    if (rideData.isNotEmpty) {
-      DateTime startTime = rideData.first.timestamp;
-      DateTime endTime = rideData.last.timestamp;
+    if (data.isNotEmpty) {
+      DateTime startTime = data.first.timestamp;
+      DateTime endTime = data.last.timestamp;
 
       duration = endTime.difference(startTime);
     }
@@ -79,13 +83,13 @@ mixin RideDataMixin {
   double _calcDistance() {
     double distance = 0;
 
-    if (rideData.isNotEmpty) {
-      rideData.asMap().forEach((idx, obs) {
+    if (data.isNotEmpty) {
+      data.asMap().forEach((idx, obs) {
         if (idx > 0) {
-          double startLat = rideData[idx - 1].locationLat ?? 0;
-          double startLong = rideData[idx - 1].locationLong ?? 0;
-          double endLat = rideData[idx].locationLat ?? 0;
-          double endLong = rideData[idx].locationLong ?? 0;
+          double startLat = data[idx - 1].locationLat ?? 0;
+          double startLong = data[idx - 1].locationLong ?? 0;
+          double endLat = data[idx].locationLat ?? 0;
+          double endLong = data[idx].locationLong ?? 0;
 
           if (startLat != 0 && startLong != 0 && endLat != 0 && endLong != 0) {
             distance += Geolocator.distanceBetween(
@@ -105,10 +109,54 @@ mixin RideDataMixin {
     double distanceKm = _calcDistance();
 
     if (durationSeconds > 0) {
-      speed = distanceKm / (durationSeconds / 60);
+      speed = distanceKm / (durationSeconds / 3600);
     }
 
     return speed;
+  }
+
+  double _calcAvgMovingSpeed() {
+    double movingSpeed = 0;
+    double distance = 0;
+    Duration duration = const Duration();
+
+    if (data.isNotEmpty) {
+      double lastLat = data.first.locationLat ?? 0;
+      double lastLong = data.first.locationLong ?? 0;
+      DateTime lastTimestamp = data.first.timestamp;
+
+      data.asMap().forEach((idx, obs) {
+        if (idx > 0) {
+          double newLat = data[idx].locationLat ?? 0;
+          double newLong = data[idx].locationLong ?? 0;
+          DateTime newTimestamp = data[idx].timestamp;
+
+          if (newLat != 0 && newLong != 0 && lastLat != 0 && lastLong != 0) {
+            double _distanceMoved =
+                Geolocator.distanceBetween(lastLat, lastLong, newLat, newLong);
+            Duration _duration = newTimestamp.difference(lastTimestamp);
+
+            if (_distanceMoved > 1) {
+              // Only consider data when movement occurs (> 1 meter)
+              distance += _distanceMoved;
+              duration += _duration;
+
+              lastLat = data[idx].locationLat ?? 0;
+              lastLong = data[idx].locationLong ?? 0;
+              lastTimestamp = data[idx].timestamp;
+            } else if (_duration.inSeconds > 3) {
+              // Under no movement, still update timestamp every 3 seconds
+              // as GPS data only updates when movement occurs
+              lastTimestamp = data[idx].timestamp;
+            }
+          }
+        }
+      });
+
+      movingSpeed = (distance / 1000) / (duration.inSeconds / 3600);
+    }
+
+    return movingSpeed;
   }
 
   double calcAbsAcceleration(obs) {
@@ -121,8 +169,8 @@ mixin RideDataMixin {
     double avgAbsAcc = 0;
     List<double> absAcc = <double>[];
 
-    if (rideData.isNotEmpty) {
-      rideData.asMap().forEach((idx, obs) {
+    if (data.isNotEmpty) {
+      data.asMap().forEach((idx, obs) {
         absAcc.add(calcAbsAcceleration(obs));
       });
 
@@ -136,8 +184,8 @@ mixin RideDataMixin {
   double _calcMaxAbsAcceleration() {
     double maxAbsAcc = 0;
 
-    if (rideData.isNotEmpty) {
-      rideData.asMap().forEach((idx, obs) {
+    if (data.isNotEmpty) {
+      data.asMap().forEach((idx, obs) {
         maxAbsAcc = max(maxAbsAcc, calcAbsAcceleration(obs));
       });
     }
@@ -149,8 +197,8 @@ mixin RideDataMixin {
     double stdDevAcc = 0;
     List<double> absAcc = <double>[];
 
-    if (rideData.isNotEmpty) {
-      rideData.asMap().forEach((idx, obs) {
+    if (data.isNotEmpty) {
+      data.asMap().forEach((idx, obs) {
         absAcc.add(calcAbsAcceleration(obs));
       });
 
