@@ -4,3 +4,4 @@ plotly
 nbformat
 requests
 bokeh
+scipy
