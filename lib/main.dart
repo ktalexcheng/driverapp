@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:driverapp/src/app/app.dart';
 
 void main() {
-  runApp(const DriverApp());
+  runApp(DriverApp());
 }
 
 class DriverApp extends StatelessWidget {
-  const DriverApp({Key? key}) : super(key: key);
+  DriverApp({Key? key}) : super(key: key);
+
+  final AppRouter _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,9 @@ class DriverApp extends StatelessWidget {
     return MaterialApp(
       title: 'Rate My Ride',
       theme: ThemeData.dark(),
-      home: const DriverAppHomePage(),
+      home: const DriverAppMainScreen(),
+      // initialRoute: '/',
+      onGenerateRoute: _appRouter.onGenerateRoute,
     );
   }
 }

@@ -2,9 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:driverapp/src/app/cubit/cubit.dart';
+import 'package:driverapp/src/history/history.dart';
+import 'package:driverapp/src/ride/ride.dart';
 
 class DriverAppNavigationBar extends StatelessWidget {
   const DriverAppNavigationBar({super.key});
+
+  static List<Widget> screens = const [
+    RideHistoryCatalog(),
+    RideActivityHome(),
+    Text('NOT YET IMPLEMENTED'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +26,8 @@ class DriverAppNavigationBar extends StatelessWidget {
         index = 0;
       } else if (state is AppNavigationStartNewRideSuccess) {
         index = 1;
+      } else if (state is AppNavigationViewProfileSuccess) {
+        index = 2;
       } else {
         index = 0;
       }
@@ -39,17 +49,23 @@ class DriverAppNavigationBar extends StatelessWidget {
               context.read<AppNavigationCubit>().viewHistory();
             } else if (index == 1) {
               context.read<AppNavigationCubit>().startNewRide();
+            } else if (index == 2) {
+              context.read<AppNavigationCubit>().viewProfile();
             }
           },
           currentIndex: _selectedIndex(state),
           items: const [
             BottomNavigationBarItem(
-              label: "History",
+              label: "Dashboard",
               icon: Icon(Icons.history),
             ),
             BottomNavigationBarItem(
-              label: "New Ride",
+              label: "Ride",
               icon: Icon(Icons.route),
+            ),
+            BottomNavigationBarItem(
+              label: "Profile",
+              icon: Icon(Icons.person),
             ),
           ],
         );

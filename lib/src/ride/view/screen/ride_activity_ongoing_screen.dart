@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:driverapp/src/ride/view/widget/widgets.dart';
 import 'package:driverapp/src/ride/data/data.dart';
 
-class RideActivityOngoingPage extends StatelessWidget {
-  const RideActivityOngoingPage({super.key});
+class RideActivityOngoingScreen extends StatelessWidget {
+  const RideActivityOngoingScreen({super.key});
 
   Duration calcRideDuration(RideData currentRideData) {
     DateTime startTime = currentRideData.first.timestamp;

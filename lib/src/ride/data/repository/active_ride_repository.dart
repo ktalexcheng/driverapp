@@ -21,7 +21,7 @@ class _SensorDataBuffer extends SensorData {
     }
   }
 
-  set setAccelerometerData(List<double> sensorData) {
+  set accelerometerData(List<double> sensorData) {
     if (!accelDataReceived) {
       super.accelerometerX = sensorData[0];
       super.accelerometerY = sensorData[1];
@@ -31,7 +31,7 @@ class _SensorDataBuffer extends SensorData {
     }
   }
 
-  set setGyroscopeData(List<double> sensorData) {
+  set gyroscopeData(List<double> sensorData) {
     if (!gyroDataReceived) {
       super.gyroscopeX = sensorData[0];
       super.gyroscopeY = sensorData[1];
@@ -41,8 +41,7 @@ class _SensorDataBuffer extends SensorData {
     }
   }
 
-  // The buffer will be fed with the latest known location when accelerometer and gyroscope data is ready
-  set setLocationData(dynamic sensorData) {
+  set locationData(dynamic sensorData) {
     super.locationLat = sensorData.latitude;
     super.locationLong = sensorData.longitude;
   }
@@ -83,8 +82,8 @@ class ActiveRideRepository {
         gyroscopeX: _dataBuffer.gyroscopeX,
         gyroscopeY: _dataBuffer.gyroscopeY,
         gyroscopeZ: _dataBuffer.gyroscopeZ,
-        locationLat: lastLocationLat,
-        locationLong: lastLocationLong,
+        locationLat: _dataBuffer.locationLat,
+        locationLong: _dataBuffer.locationLong,
       );
       elapsedSeconds = DateTime.now().difference(sensorData.timestamp);
       rideDataStreamController.add(sensorData);
@@ -118,8 +117,8 @@ class ActiveRideRepository {
     // Location data only updates on position change
     locationSubscription = sensorController.locationStream?.listen(
       (event) {
-        lastLocationLat = event.latitude;
-        lastLocationLong = event.longitude;
+        _addLocDataToBuffer(event);
+        addDataToRide();
       },
     );
   }
@@ -149,10 +148,14 @@ class ActiveRideRepository {
   }
 
   void _addAccelDataToBuffer(sensorEvent) {
-    _dataBuffer.setAccelerometerData = sensorEvent.data;
+    _dataBuffer.accelerometerData = sensorEvent.data;
   }
 
   void _addGyroDataToBuffer(sensorEvent) {
-    _dataBuffer.setGyroscopeData = sensorEvent.data;
+    _dataBuffer.gyroscopeData = sensorEvent.data;
+  }
+
+  void _addLocDataToBuffer(sensorEvent) {
+    _dataBuffer.locationData = sensorEvent;
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:driverapp/src/ride/cubit/cubit.dart';
-import 'package:driverapp/src/ride/view/page/page.dart';
+import 'package:driverapp/src/ride/view/screen/screen.dart';
 
 class RideActivityHome extends StatelessWidget {
   const RideActivityHome({super.key});
@@ -21,11 +21,11 @@ class RideActivityHome extends StatelessWidget {
         },
         builder: (context, state) {
           if (state.status == RideActivityStatus.ready) {
-            return const RideActivityReadyPage();
+            return const RideActivityReadyScreen();
           } else if (state.status == RideActivityStatus.running ||
               state.status == RideActivityStatus.paused ||
               state.status == RideActivityStatus.saving) {
-            return const RideActivityOngoingPage();
+            return const RideActivityOngoingScreen();
           } else {
             return const Text(
                 "ERROR: App is in an invalid state! Please re-open the app.");

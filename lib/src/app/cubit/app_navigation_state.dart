@@ -18,3 +18,9 @@ class AppNavigationStartNewRideInProgress extends AppNavigationState {}
 class AppNavigationStartNewRideSuccess extends AppNavigationState {}
 
 class AppNavigationStartNewRideFailure extends AppNavigationState {}
+
+class AppNavigationViewProfileInProgress extends AppNavigationState {}
+
+class AppNavigationViewProfileSuccess extends AppNavigationState {}
+
+class AppNavigationViewProfileFailure extends AppNavigationState {}

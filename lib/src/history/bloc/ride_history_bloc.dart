@@ -11,7 +11,8 @@ class RideHistoryBloc extends Bloc<RideHistoryEvent, RideHistoryState> {
     driverAppDBClient = DriverAppDBAPI();
 
     on<RideHistoryCatalogRequested>(_onRideCatalogRequested);
-    on<RideHistoryLastRideDataRequested>(_onLastRideDataRequested);
+    // on<RideHistoryLastRideDataRequested>(_onLastRideDataRequested);
+    on<RideHistoryRideDataRequested>(_onRideDataRequested);
   }
 
   late DriverAppDBAPI driverAppDBClient;
@@ -26,19 +27,26 @@ class RideHistoryBloc extends Bloc<RideHistoryEvent, RideHistoryState> {
     emit(RideHistoryGetCatalogSuccess(rideCatalog: allRides));
   }
 
-  Future<void> _onLastRideDataRequested(
-      RideHistoryEvent event, Emitter<RideHistoryState> emit) async {
-    List<RideMeta> allRides = await driverAppDBClient.fetchRideCatalog();
-    emit(RideHistoryGetLastRideInProgress());
+  // Future<void> _onLastRideDataRequested(
+  //     RideHistoryEvent event, Emitter<RideHistoryState> emit) async {
+  //   List<RideMeta> allRides = await driverAppDBClient.fetchRideCatalog();
+  //   emit(RideHistoryGetRideInProgress());
 
-    bool historyFound = allRides.isNotEmpty ? true : false;
+  //   // bool historyFound = allRides.isNotEmpty ? true : false;
 
-    if (historyFound) {
-      Ride ride = await driverAppDBClient.fetchRideData(allRides.first.id!);
+  //   if (allRides.isNotEmpty) {
+  //     Ride ride = await driverAppDBClient.fetchRideData(allRides.first.id!);
 
-      emit(RideHistoryGetLastRideSuccess(fetchedRide: ride));
-    } else {
-      emit(RideHistoryGetLastRideFailure());
-    }
+  //     emit(RideHistoryGetRideSuccess(fetchedRide: ride));
+  //   } else {
+  //     emit(RideHistoryGetRideFailure());
+  //   }
+  // }
+
+  Future<void> _onRideDataRequested(RideHistoryRideDataRequested event,
+      Emitter<RideHistoryState> emit) async {
+    Ride ride = await driverAppDBClient.fetchRideData(event.rideId);
+
+    emit(RideHistoryGetRideSuccess(fetchedRide: ride));
   }
 }

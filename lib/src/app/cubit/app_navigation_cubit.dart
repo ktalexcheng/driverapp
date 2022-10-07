@@ -13,4 +13,8 @@ class AppNavigationCubit extends Cubit<AppNavigationState> {
   void startNewRide() {
     emit(AppNavigationStartNewRideSuccess());
   }
+
+  void viewProfile() {
+    emit(AppNavigationViewProfileSuccess());
+  }
 }

@@ -9,4 +9,8 @@ class RideHistoryStarted extends RideHistoryEvent {}
 
 class RideHistoryCatalogRequested extends RideHistoryEvent {}
 
-class RideHistoryLastRideDataRequested extends RideHistoryEvent {}
+class RideHistoryRideDataRequested extends RideHistoryEvent {
+  RideHistoryRideDataRequested(this.rideId);
+
+  final String rideId;
+}

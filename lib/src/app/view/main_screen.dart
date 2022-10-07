@@ -6,8 +6,8 @@ import 'package:driverapp/src/app/view/view.dart';
 import 'package:driverapp/src/ride/ride.dart';
 import 'package:driverapp/src/history/history.dart';
 
-class DriverAppHomePage extends StatelessWidget {
-  const DriverAppHomePage({super.key});
+class DriverAppMainScreen extends StatelessWidget {
+  const DriverAppMainScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +25,7 @@ class DriverAppHomePage extends StatelessWidget {
         appBar: AppBar(
           title: const Text('DriverApp'),
         ),
+        bottomNavigationBar: const DriverAppNavigationBar(),
         body: BlocBuilder<AppNavigationCubit, AppNavigationState>(
           buildWhen: (previous, current) {
             if (previous != current) {
@@ -42,17 +43,12 @@ class DriverAppHomePage extends StatelessWidget {
 
               return const RideHistoryCatalog();
             } else if (state is AppNavigationStartNewRideSuccess) {
-              context
-                  .read<RideHistoryBloc>()
-                  .add(RideHistoryLastRideDataRequested());
-
               return const RideActivityHome();
             } else {
-              return const RideHistoryCatalog();
+              return const Center(child: Text("NOT YET IMPLEMENTED!"));
             }
           },
         ),
-        bottomNavigationBar: const DriverAppNavigationBar(),
       ),
     );
   }

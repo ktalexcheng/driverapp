@@ -22,7 +22,7 @@ mixin SensorDataLiveChartMixin on StatelessWidget {
     enablePanning: true,
   );
 
-  static const int dataWindow = 100;
+  static const int dataWindow = 300;
 
   void _refreshChartData(ChartDatum newData) {
     chartData.add(newData);

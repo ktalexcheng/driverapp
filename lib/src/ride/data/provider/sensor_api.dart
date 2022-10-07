@@ -59,7 +59,7 @@ class AccelerometerSensor {
     if (await sensorStatus) {
       Stream accelStream = await SensorManager().sensorUpdates(
         sensorId: Sensors.LINEAR_ACCELERATION,
-        interval: Sensors.SENSOR_DELAY_UI,
+        interval: Sensors.SENSOR_DELAY_FASTEST,
       );
 
       return accelStream;
@@ -86,7 +86,7 @@ class GyroscopeSensor {
     if (await sensorStatus) {
       Stream gyroStream = await SensorManager().sensorUpdates(
         sensorId: Sensors.GYROSCOPE,
-        interval: Sensors.SENSOR_DELAY_UI,
+        interval: Sensors.SENSOR_DELAY_FASTEST,
       );
 
       return gyroStream;

@@ -3,12 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:driverapp/src/history/bloc/bloc.dart';
 import 'package:driverapp/src/history/view/widget/widget.dart';
+import 'package:driverapp/src/app/app.dart';
 
 class RideHistoryCatalog extends StatelessWidget {
   const RideHistoryCatalog({super.key});
 
   @override
   Widget build(BuildContext context) {
+    context.read<RideHistoryBloc>().add(RideHistoryCatalogRequested());
+
     return BlocBuilder<RideHistoryBloc, RideHistoryState>(
       builder: (context, state) {
         if (state is RideHistoryInitial) {
@@ -26,6 +29,7 @@ class RideHistoryCatalog extends StatelessWidget {
             // ),
             itemBuilder: (context, index) {
               return RideHistoryPreviewCard(
+                rideId: state.rideCatalog[index].id!,
                 rideName: state.rideCatalog[index].rideName,
                 rideDate: state.rideCatalog[index].rideDate,
               );
