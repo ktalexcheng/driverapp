@@ -1,4 +1,4 @@
-import 'package:driverapp/src/ride/data/model/model.dart';
+import 'package:trailbrake/src/ride/data/model/model.dart';
 
 // class Ride extends RideMeta with RideDataMixin {
 class Ride with RideMetaMixin, RideDataMixin {

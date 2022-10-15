@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import 'package:driverapp/src/ride/ride.dart';
+import 'package:trailbrake/src/ride/ride.dart';
 
 class ChartDatum {
   ChartDatum({

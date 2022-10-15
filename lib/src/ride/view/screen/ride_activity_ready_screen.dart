@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:driverapp/src/ride/view/widget/widgets.dart';
-// import 'package:driverapp/src/analysis/analysis.dart';
+import 'package:trailbrake/src/ride/view/widget/widgets.dart';
+// import 'package:trailbrake/src/analysis/analysis.dart';
 
 class RideActivityReadyScreen extends StatelessWidget {
   const RideActivityReadyScreen({super.key});

@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 // import 'package:permission_handler/permission_handler.dart';
 
-import 'package:driverapp/src/ride/data/data.dart';
+import 'package:trailbrake/src/ride/data/data.dart';
 
 // DEV ONLY
 // import 'dart:io';
 
-class DriverAppDBAPI {
+class RideDataAPI {
   final String apiDomain = 'https://driverapp-2022.de.r.appspot.com';
   http.Client client = http.Client();
 

@@ -1,8 +1,8 @@
 import 'dart:async';
 // import 'dart:convert';
 
-import 'package:driverapp/src/ride/data/model/model.dart';
-import 'package:driverapp/src/ride/data/provider/provider.dart';
+import 'package:trailbrake/src/ride/data/model/model.dart';
+import 'package:trailbrake/src/ride/data/provider/provider.dart';
 
 class _SensorDataBuffer extends SensorData {
   _SensorDataBuffer()
@@ -23,9 +23,9 @@ class _SensorDataBuffer extends SensorData {
 
   set accelerometerData(List<double> sensorData) {
     if (!accelDataReceived) {
-      super.accelerometerX = sensorData[0];
-      super.accelerometerY = sensorData[1];
-      super.accelerometerZ = sensorData[2];
+      super.accelerometerX = sensorData[2];
+      super.accelerometerY = sensorData[0];
+      super.accelerometerZ = sensorData[1];
 
       accelDataReceived = true;
     }

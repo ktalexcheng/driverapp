@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:driverapp/src/ride/view/view.dart';
-import 'package:driverapp/src/ride/cubit/cubit.dart';
+import 'package:trailbrake/src/ride/view/view.dart';
+import 'package:trailbrake/src/ride/cubit/cubit.dart';
 
 class RideActivityControls extends StatelessWidget {
   const RideActivityControls({super.key});

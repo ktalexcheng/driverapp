@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:driverapp/src/ride/data/data.dart';
+import 'package:trailbrake/src/ride/data/data.dart';
 
 void main() {
   group('RideHistory', () {

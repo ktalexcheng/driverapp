@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
-project(driverapp LANGUAGES CXX)
+project(trailbrake LANGUAGES CXX)
 
-set(BINARY_NAME "driverapp")
+set(BINARY_NAME "trailbrake")
 
 cmake_policy(SET CMP0063 NEW)
 

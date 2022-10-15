@@ -6,15 +6,15 @@ part 'app_navigation_state.dart';
 class AppNavigationCubit extends Cubit<AppNavigationState> {
   AppNavigationCubit() : super(AppNavigationInitial());
 
-  void viewHistory() {
-    emit(AppNavigationLoadHistorySuccess());
+  void viewDashboard() {
+    emit(AppNavigationLoadDashboardSuccess());
   }
 
-  void startNewRide() {
-    emit(AppNavigationStartNewRideSuccess());
+  void startRide() {
+    emit(AppNavigationStartRideSuccess());
   }
 
   void viewProfile() {
-    emit(AppNavigationViewProfileSuccess());
+    emit(AppNavigationLoadProfileSuccess());
   }
 }

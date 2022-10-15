@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:geolocator/geolocator.dart';
 
-import 'package:driverapp/src/ride/data/model/model.dart';
+import 'package:trailbrake/src/ride/data/model/model.dart';
 
 class RideData with RideDataMixin {
   RideData({rideData}) {

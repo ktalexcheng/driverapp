@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:driverapp/src/ride/data/data.dart';
+import 'package:trailbrake/src/ride/data/data.dart';
 
 part 'ride_activity_state.dart';
 
@@ -38,7 +38,7 @@ class RideActivityCubit extends Cubit<RideActivityState> {
 
   void saveRide(String rideName) async {
     if (state.status == RideActivityStatus.saving) {
-      DriverAppDBAPI driverAppDBClient = DriverAppDBAPI();
+      RideDataAPI rideDataClient = RideDataAPI();
 
       Ride ride = Ride(
         id: null,
@@ -47,7 +47,7 @@ class RideActivityCubit extends Cubit<RideActivityState> {
         rideData: rideDataRepository.rideData.data,
       );
 
-      await driverAppDBClient.saveRideData(ride);
+      await rideDataClient.saveRideData(ride);
 
       emit(RideActivityState(
         status: RideActivityStatus.ready,

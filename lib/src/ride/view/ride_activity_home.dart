@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:driverapp/src/ride/cubit/cubit.dart';
-import 'package:driverapp/src/ride/view/screen/screen.dart';
+import 'package:trailbrake/src/ride/cubit/cubit.dart';
+import 'package:trailbrake/src/ride/view/screen/screen.dart';
 
 class RideActivityHome extends StatelessWidget {
   const RideActivityHome({super.key});

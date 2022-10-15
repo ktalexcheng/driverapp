@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 // import 'package:bloc_test/bloc_test.dart';
 
-import 'package:driverapp/src/ride/cubit/cubit.dart';
+import 'package:trailbrake/src/ride/cubit/cubit.dart';
 
 void main() {
   group('RideActivityCubit', () {

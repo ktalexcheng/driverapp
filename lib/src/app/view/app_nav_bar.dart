@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:driverapp/src/app/cubit/cubit.dart';
-import 'package:driverapp/src/history/history.dart';
-import 'package:driverapp/src/ride/ride.dart';
+import 'package:trailbrake/src/app/cubit/cubit.dart';
+// import 'package:trailbrake/src/dashboard/dashboard.dart';
+// import 'package:trailbrake/src/ride/ride.dart';
+// import 'package:trailbrake/src/profile/view/view.dart';
 
-class DriverAppNavigationBar extends StatelessWidget {
-  const DriverAppNavigationBar({super.key});
-
-  static List<Widget> screens = const [
-    RideHistoryCatalog(),
-    RideActivityHome(),
-    Text('NOT YET IMPLEMENTED'),
-  ];
+class AppNavigationBar extends StatelessWidget {
+  const AppNavigationBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +15,14 @@ class DriverAppNavigationBar extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     int _selectedIndex(AppNavigationState state) {
-      int index = 0;
+      int index = 2; // Show "Profile" page on initial landing
 
-      if (state is AppNavigationLoadHistorySuccess) {
+      if (state is AppNavigationLoadDashboardSuccess) {
         index = 0;
-      } else if (state is AppNavigationStartNewRideSuccess) {
+      } else if (state is AppNavigationStartRideSuccess) {
         index = 1;
-      } else if (state is AppNavigationViewProfileSuccess) {
+      } else if (state is AppNavigationLoadProfileSuccess) {
         index = 2;
-      } else {
-        index = 0;
       }
 
       return index;
@@ -46,9 +39,9 @@ class DriverAppNavigationBar extends StatelessWidget {
           unselectedLabelStyle: textTheme.caption,
           onTap: (index) {
             if (index == 0) {
-              context.read<AppNavigationCubit>().viewHistory();
+              context.read<AppNavigationCubit>().viewDashboard();
             } else if (index == 1) {
-              context.read<AppNavigationCubit>().startNewRide();
+              context.read<AppNavigationCubit>().startRide();
             } else if (index == 2) {
               context.read<AppNavigationCubit>().viewProfile();
             }
@@ -57,7 +50,7 @@ class DriverAppNavigationBar extends StatelessWidget {
           items: const [
             BottomNavigationBarItem(
               label: "Dashboard",
-              icon: Icon(Icons.history),
+              icon: Icon(Icons.speed),
             ),
             BottomNavigationBarItem(
               label: "Ride",

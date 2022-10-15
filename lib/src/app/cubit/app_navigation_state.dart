@@ -7,20 +7,20 @@ abstract class AppNavigationState {}
 
 class AppNavigationInitial extends AppNavigationState {}
 
-class AppNavigationLoadHistoryInProgress extends AppNavigationState {}
+// class AppNavigationLoadDashboardInProgress extends AppNavigationState {}
 
-class AppNavigationLoadHistorySuccess extends AppNavigationState {}
+class AppNavigationLoadDashboardSuccess extends AppNavigationState {}
 
-class AppNavigationLoadHistoryFailure extends AppNavigationState {}
+// class AppNavigationLoadDashboardFailure extends AppNavigationState {}
 
-class AppNavigationStartNewRideInProgress extends AppNavigationState {}
+// class AppNavigationStartRideInProgress extends AppNavigationState {}
 
-class AppNavigationStartNewRideSuccess extends AppNavigationState {}
+class AppNavigationStartRideSuccess extends AppNavigationState {}
 
-class AppNavigationStartNewRideFailure extends AppNavigationState {}
+// class AppNavigationStartRideFailure extends AppNavigationState {}
 
-class AppNavigationViewProfileInProgress extends AppNavigationState {}
+// class AppNavigationLoadProfileInProgress extends AppNavigationState {}
 
-class AppNavigationViewProfileSuccess extends AppNavigationState {}
+class AppNavigationLoadProfileSuccess extends AppNavigationState {}
 
-class AppNavigationViewProfileFailure extends AppNavigationState {}
+// class AppNavigationLoadProfileFailure extends AppNavigationState {}

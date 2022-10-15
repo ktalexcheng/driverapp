@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:driverapp/src/ride/view/widget/widgets.dart';
-import 'package:driverapp/src/ride/data/data.dart';
+import 'package:trailbrake/src/ride/view/widget/widgets.dart';
+import 'package:trailbrake/src/ride/data/data.dart';
 
 class RideActivityOngoingScreen extends StatelessWidget {
   const RideActivityOngoingScreen({super.key});

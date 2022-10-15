@@ -1,14 +1,15 @@
 import 'package:wakelock/wakelock.dart'; // FOR DEVELOPMENT ONLY
 import 'package:flutter/material.dart';
 
-import 'package:driverapp/src/app/app.dart';
+import 'package:trailbrake/src/app/app.dart';
+import 'package:trailbrake/theme/theme.dart';
 
 void main() {
-  runApp(DriverApp());
+  runApp(TrailBrakeApp());
 }
 
-class DriverApp extends StatelessWidget {
-  DriverApp({Key? key}) : super(key: key);
+class TrailBrakeApp extends StatelessWidget {
+  TrailBrakeApp({Key? key}) : super(key: key);
 
   final AppRouter _appRouter = AppRouter();
 
@@ -18,8 +19,10 @@ class DriverApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Rate My Ride',
-      theme: ThemeData.dark(),
-      home: const DriverAppMainScreen(),
+      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
+      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      themeMode: ThemeMode.dark,
+      home: const AppMainScreen(),
       // initialRoute: '/',
       onGenerateRoute: _appRouter.onGenerateRoute,
     );

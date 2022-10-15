@@ -1,6 +1,6 @@
 {
-    "name": "driverapp",
-    "short_name": "driverapp",
+    "name": "trailbrake",
+    "short_name": "trailbrake",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

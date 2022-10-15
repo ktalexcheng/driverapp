@@ -1,2 +1,2 @@
-export 'main_screen.dart';
-export 'bottom_navigation_bar.dart';
+export 'app_main_screen.dart';
+export 'app_nav_bar.dart';
