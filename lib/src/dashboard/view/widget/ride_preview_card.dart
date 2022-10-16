@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 // import 'package:trailbrake/src/dashboard/bloc/bloc.dart';
 // import 'package:trailbrake/src/dashboard/view/screen/screen.dart';
 // import 'package:trailbrake/src/dashboard/view/widget/widget.dart';
+import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class PreviewCardMetrics extends StatelessWidget {
   const PreviewCardMetrics({super.key, required this.text});
@@ -43,7 +44,7 @@ class RidePreviewCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: constants.appDefaultPadding,
           child: IntrinsicHeight(
             child: Stack(
               children: [
@@ -65,7 +66,7 @@ class RidePreviewCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const Padding(padding: EdgeInsets.only(top: 16)),
+                    constants.rowSpacer,
                     const PreviewCardMetrics(text: "Distance: 10.2 km"),
                     const PreviewCardMetrics(text: "Duration: 32:15"),
                     const PreviewCardMetrics(text: "Max acceleration: 1.1 g"),

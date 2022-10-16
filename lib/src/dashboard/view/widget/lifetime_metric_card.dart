@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 // import 'package:trailbrake/src/dashboard/bloc/bloc.dart';
 // import 'package:trailbrake/src/dashboard/view/screen/screen.dart';
 // import 'package:trailbrake/src/dashboard/view/widget/widget.dart';
+import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class LifetimeMetricCard extends StatelessWidget {
   const LifetimeMetricCard(
@@ -23,7 +24,7 @@ class LifetimeMetricCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: constants.appDefaultPadding,
         child: Column(
           children: [
             Text(title),

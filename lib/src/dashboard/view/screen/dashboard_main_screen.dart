@@ -12,63 +12,67 @@ class DashboardMainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => DashboardBloc()..add(DashboardCatalogRequested()),
+      create: (_) => DashboardBloc()..add(DashboardCatalogRequested()),
       child: BlocBuilder<DashboardBloc, DashboardState>(
         builder: (context, state) {
           if (state is DashboardGetCatalogSuccess) {
-            return SafeArea(
-              child: Padding(
-                padding: constants.appDefaultPadding,
-                child: Column(
-                  children: [
-                    const ScreenTitle(title: constants.dashboardScreenTitle),
-                    const SectionTitle(
-                        title: constants.lifetimeMetricsSectionTitle),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: const [
-                          LifetimeMetricCard(
-                            type: 'distance',
-                            title: "Distance travelled",
-                            value: "4029.1 km",
-                          ),
-                          LifetimeMetricCard(
-                            type: 'distance',
-                            title: "Distance travelled",
-                            value: "4029.1 km",
-                          ),
-                          LifetimeMetricCard(
-                            type: 'distance',
-                            title: "Distance travelled",
-                            value: "4029.1 km",
-                          ),
-                        ],
-                      ),
+            return AppCanvas(
+              child: Column(
+                children: [
+                  const ScreenTitle(title: constants.dashboardScreenTitle),
+                  const SectionTitle(
+                      title: constants.lifetimeMetricsSectionTitle),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: const [
+                        LifetimeMetricCard(
+                          type: 'distance',
+                          title: "Distance travelled",
+                          value: "4029.1 km",
+                        ),
+                        LifetimeMetricCard(
+                          type: 'distance',
+                          title: "Distance travelled",
+                          value: "4029.1 km",
+                        ),
+                        LifetimeMetricCard(
+                          type: 'distance',
+                          title: "Distance travelled",
+                          value: "4029.1 km",
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: SizedBox.expand(
-                        child: DefaultTabController(
-                          length: 2,
-                          child: Column(
-                            children: [
-                              Row(
-                                children: const [
-                                  TabBar(
-                                    isScrollable: true,
-                                    labelPadding:
-                                        EdgeInsets.symmetric(horizontal: 8),
-                                    tabs: [
-                                      Tab(height: 30, text: "Best Rides"),
-                                      Tab(height: 30, text: "All Rides"),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Expanded(
-                                child: TabBarView(
-                                  children: [
-                                    ListView.builder(
+                  ),
+                  Expanded(
+                    child: SizedBox.expand(
+                      child: DefaultTabController(
+                        length: 2,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: const [
+                                TabBar(
+                                  isScrollable: true,
+                                  labelPadding:
+                                      EdgeInsets.symmetric(horizontal: 8),
+                                  tabs: [
+                                    Tab(height: 30, text: "Best Rides"),
+                                    Tab(height: 30, text: "All Rides"),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Expanded(
+                              child: TabBarView(
+                                children: [
+                                  RefreshIndicator(
+                                    onRefresh: () async => context
+                                        .read<DashboardBloc>()
+                                        .add(DashboardCatalogRequested()),
+                                    child: ListView.builder(
+                                      physics:
+                                          const AlwaysScrollableScrollPhysics(), // To enable RefreshIndicator
                                       scrollDirection: Axis.vertical,
                                       itemCount: state.rideCatalog.length,
                                       itemBuilder: (context, index) {
@@ -81,17 +85,17 @@ class DashboardMainScreen extends StatelessWidget {
                                         );
                                       },
                                     ),
-                                    const Text("NOT YET IMPLEMENTED"),
-                                  ],
-                                ),
+                                  ),
+                                  const Text("NOT YET IMPLEMENTED"),
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           } else {

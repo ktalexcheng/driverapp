@@ -12,24 +12,48 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
     on<DashboardCatalogRequested>(_onRideCatalogRequested);
     on<DashboardDataRequested>(_onRideDataRequested);
+    on<DashboardDeleteRideRequested>(_onDeleteRideRequested);
   }
 
   late RideDataAPI rideDataClient;
-  late List<RideMeta> allRides;
+  // late List<RideMeta> allRides;
 
   Future<void> _onRideCatalogRequested(
-      DashboardEvent event, Emitter<DashboardState> emit) async {
+      DashboardCatalogRequested event, Emitter<DashboardState> emit) async {
     emit(DashboardGetCatalogInProgress());
 
-    allRides = await rideDataClient.fetchRideCatalog();
+    APIResponse response = await rideDataClient.fetchRideCatalog();
 
-    emit(DashboardGetCatalogSuccess(rideCatalog: allRides));
+    if (response.httpCode == 200) {
+      emit(DashboardGetCatalogSuccess(rideCatalog: response.responseBody));
+    } else {
+      emit(DashboardGetCatalogFailure());
+    }
   }
 
   Future<void> _onRideDataRequested(
       DashboardDataRequested event, Emitter<DashboardState> emit) async {
-    Ride ride = await rideDataClient.fetchRideData(event.rideId);
+    emit(DashboardGetRideInProgress());
 
-    emit(DashboardGetRideSuccess(fetchedRide: ride));
+    APIResponse response = await rideDataClient.fetchRideData(event.rideId);
+
+    if (response.httpCode == 200) {
+      emit(DashboardGetRideSuccess(fetchedRide: response.responseBody));
+    } else {
+      emit(DashboardGetRideFailure());
+    }
+  }
+
+  Future<void> _onDeleteRideRequested(
+      DashboardDeleteRideRequested event, Emitter<DashboardState> emit) async {
+    emit(DashboardDeleteRideInProgress());
+
+    APIResponse response = await rideDataClient.deleteRideData(event.rideId);
+
+    if (response.httpCode == 200) {
+      emit(DashboardDeleteRideSuccess());
+    } else {
+      emit(DashboardDeleteRideFailure());
+    }
   }
 }

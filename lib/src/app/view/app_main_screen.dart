@@ -29,7 +29,7 @@ class AppMainScreen extends StatelessWidget {
           },
           builder: (context, state) {
             if (state is AppNavigationInitial) {
-              return const UserProfileScreen();
+              return const DashboardMainScreen();
             } else if (state is AppNavigationLoadDashboardSuccess) {
               return const DashboardMainScreen();
             } else if (state is AppNavigationStartRideSuccess) {

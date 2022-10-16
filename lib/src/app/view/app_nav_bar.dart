@@ -15,7 +15,7 @@ class AppNavigationBar extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     int _selectedIndex(AppNavigationState state) {
-      int index = 2; // Show "Profile" page on initial landing
+      int index = 0; // Show "Profile" page on initial landing
 
       if (state is AppNavigationLoadDashboardSuccess) {
         index = 0;

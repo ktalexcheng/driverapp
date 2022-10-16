@@ -40,6 +40,11 @@ class DashboardGetCatalogSuccess extends DashboardState {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
+class DashboardGetCatalogFailure extends DashboardState {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
 class DashboardGetRideInProgress extends DashboardState {
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
@@ -58,6 +63,21 @@ class DashboardGetRideSuccess extends DashboardState {
 }
 
 class DashboardGetRideFailure extends DashboardState {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class DashboardDeleteRideInProgress extends DashboardState {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class DashboardDeleteRideSuccess extends DashboardState {
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class DashboardDeleteRideFailure extends DashboardState {
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

@@ -3,16 +3,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trailbrake/src/ride/view/view.dart';
 import 'package:trailbrake/src/ride/cubit/cubit.dart';
+import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class RideActivityControls extends StatelessWidget {
   const RideActivityControls({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        const Padding(padding: EdgeInsets.only(top: 16.0)),
-        Row(
+    // return Column(
+    //   children: <Widget>[
+    return BlocBuilder<RideActivityCubit, RideActivityState>(
+      builder: (context, state) {
+        // var controls
+        return Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             MaterialButton(
@@ -20,17 +23,13 @@ class RideActivityControls extends StatelessWidget {
               color: Colors.green,
               onPressed: () => context.read<RideActivityCubit>().startRide(),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-            ),
+            constants.columnSpacer,
             MaterialButton(
               child: const Text("Stop"),
               color: Colors.red,
               onPressed: () => context.read<RideActivityCubit>().stopRide(),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-            ),
+            constants.columnSpacer,
             MaterialButton(
               child: const Text("Reset"),
               color: Colors.blue,
@@ -56,8 +55,10 @@ class RideActivityControls extends StatelessWidget {
               },
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
+    //   ],
+    // );
   }
 }

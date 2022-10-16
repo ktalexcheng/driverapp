@@ -14,3 +14,9 @@ class DashboardDataRequested extends DashboardEvent {
 
   final String rideId;
 }
+
+class DashboardDeleteRideRequested extends DashboardEvent {
+  DashboardDeleteRideRequested(this.rideId);
+
+  final String rideId;
+}

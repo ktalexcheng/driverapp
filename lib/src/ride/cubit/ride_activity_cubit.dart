@@ -29,15 +29,13 @@ class RideActivityCubit extends Cubit<RideActivityState> {
   }
 
   void resetRide() {
-    if (state.status != RideActivityStatus.ready) {
-      _cancelSubscription();
-      rideDataRepository.stopRide();
-      emit(RideActivityState(status: RideActivityStatus.saving));
-    }
+    stopRide();
   }
 
   void saveRide(String rideName) async {
-    if (state.status == RideActivityStatus.saving) {
+    if (state.status == RideActivityStatus.paused) {
+      emit(RideActivityState(status: RideActivityStatus.saving));
+
       RideDataAPI rideDataClient = RideDataAPI();
 
       Ride ride = Ride(
@@ -49,10 +47,7 @@ class RideActivityCubit extends Cubit<RideActivityState> {
 
       await rideDataClient.saveRideData(ride);
 
-      emit(RideActivityState(
-        status: RideActivityStatus.ready,
-        newSensorData: rideDataRepository.rideData.last,
-      ));
+      emit(RideActivityState(status: RideActivityStatus.saved));
     }
   }
 
