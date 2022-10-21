@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-// import 'package:trailbrake/src/dashboard/bloc/bloc.dart';
-// import 'package:trailbrake/src/dashboard/view/screen/screen.dart';
-// import 'package:trailbrake/src/dashboard/view/widget/widget.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class PreviewCardMetrics extends StatelessWidget {
@@ -36,8 +33,12 @@ class RidePreviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (() {
+        Map args = {
+          'rideId': rideId,
+          'context': context,
+        };
         Navigator.of(context)
-            .pushNamed('/dashboard/rideDetails', arguments: rideId);
+            .pushNamed('/dashboard/rideDetails', arguments: args);
       }),
       child: Card(
         shape: RoundedRectangleBorder(

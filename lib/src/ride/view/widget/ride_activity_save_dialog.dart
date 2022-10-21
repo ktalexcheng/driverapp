@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:trailbrake/src/common/constants.dart' as constants;
+
 class RideActivitySaveNamePrompt extends StatelessWidget {
   const RideActivitySaveNamePrompt({super.key});
 
@@ -62,7 +64,7 @@ class RideActivitySaveDialog extends StatelessWidget {
 
     return AlertDialog(
       title: const Text("Save data?"),
-      content: const Text("Would you like to save data for this ride?"),
+      content: const Text(constants.saveRidePromptMessage),
       actions: [
         saveDataButton,
         discardDataButton,

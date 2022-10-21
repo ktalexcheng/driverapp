@@ -13,6 +13,11 @@ class RideActivityCubit extends Cubit<RideActivityState> {
   ActiveRideRepository rideDataRepository = ActiveRideRepository();
   StreamSubscription? rideDataSubscription;
 
+  void initRide() {
+    rideDataRepository.clearRideData();
+    emit(RideActivityState(status: RideActivityStatus.ready));
+  }
+
   void startRide() {
     if (state.status != RideActivityStatus.running) {
       rideDataRepository.startRide();
@@ -28,9 +33,9 @@ class RideActivityCubit extends Cubit<RideActivityState> {
     }
   }
 
-  void resetRide() {
-    stopRide();
-  }
+  // void resetRide() {
+  //   stopRide();
+  // }
 
   void saveRide(String rideName) async {
     if (state.status == RideActivityStatus.paused) {
@@ -52,10 +57,8 @@ class RideActivityCubit extends Cubit<RideActivityState> {
   }
 
   void discardRide() async {
-    if (state.status == RideActivityStatus.saving) {
-      rideDataRepository.clearRideData();
-      emit(RideActivityState(status: RideActivityStatus.ready));
-    }
+    rideDataRepository.clearRideData();
+    emit(RideActivityState(status: RideActivityStatus.ready));
   }
 
   void _cancelSubscription() {

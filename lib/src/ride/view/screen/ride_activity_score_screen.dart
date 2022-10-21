@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:trailbrake/src/app/app.dart';
 import 'package:trailbrake/src/ride/cubit/cubit.dart';
 import 'package:trailbrake/src/common/common.dart';
 
-class RideActivityStartButton extends StatelessWidget {
-  const RideActivityStartButton({super.key});
+class RideActivityGoToDashboardButton extends StatelessWidget {
+  const RideActivityGoToDashboardButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        context.read<RideActivityCubit>().startRide();
+        context.read<RideActivityCubit>().initRide();
+        context.read<AppNavigationCubit>().viewDashboard();
+        Navigator.of(context).pop();
       },
-      child: const Text("Start ride!"),
+      child: const Text("Go to dashboard"),
       style: ElevatedButton.styleFrom(
         minimumSize: const Size.fromHeight(40),
       ),
@@ -21,24 +24,21 @@ class RideActivityStartButton extends StatelessWidget {
   }
 }
 
-class RideActivityReadyScreen extends StatelessWidget {
-  const RideActivityReadyScreen({super.key});
+class RideActivityScoreScreen extends StatelessWidget {
+  const RideActivityScoreScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppCanvas(
       child: Stack(
         children: [
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              alignment: Alignment.center,
-              color: Colors.grey,
-              height: 40,
-              child: const Text("Acquiring GPS..."),
-            ),
+          Column(
+            children: const [
+              ScreenTitle(title: "Ride completed!"),
+              Scorecard(title: "Ride score", score: 69),
+              SectionTitle(title: "Score breakdown"),
+              ScoreProfile(),
+            ],
           ),
           Positioned(
             bottom: 0,
@@ -49,7 +49,7 @@ class RideActivityReadyScreen extends StatelessWidget {
               children: [
                 Row(
                   children: const [
-                    Expanded(child: RideActivityStartButton()),
+                    Expanded(child: RideActivityGoToDashboardButton()),
                   ],
                 ),
               ],

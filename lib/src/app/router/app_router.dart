@@ -1,59 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-// import 'package:trailbrake/src/app/cubit/cubit.dart';
+import 'package:trailbrake/src/app/cubit/cubit.dart';
 import 'package:trailbrake/src/dashboard/dashboard.dart';
-// import 'package:trailbrake/src/ride/ride.dart';
-// import 'package:trailbrake/src/app/view/view.dart';
+import 'package:trailbrake/src/ride/ride.dart';
 
 class AppRouter {
-  // final AppNavigationCubit _appNavigationCubit = AppNavigationCubit();
-  // final DashboardBloc _dashboardBloc = DashboardBloc();
-
   Route? onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
-      // case '/':
-      //   return MaterialPageRoute(
-      //     builder: (_) => MultiBlocProvider(
-      //       providers: [
-      //         BlocProvider.value(
-      //           value: _appNavigationCubit,
-      //         ),
-      //         BlocProvider.value(
-      //           value: _rideHistoryBloc,
-      //         ),
-      //       ],
-      //       child: const RideHistoryCatalog(),
-      //     ),
-      //   );
-
-      // case '/dashboard/rideHistoryCatalog':
-      //   return MaterialPageRoute(
-      //     builder: (_) => MultiBlocProvider(
-      //       providers: [
-      //         BlocProvider.value(
-      //           value: _appNavigationCubit,
-      //         ),
-      //         BlocProvider.value(
-      //           value: _rideHistoryBloc,
-      //         ),
-      //       ],
-      //       child: const RideHistoryCatalog(),
-      //     ),
-      //   );
-
       case '/dashboard/rideDetails':
-        var rideId = routeSettings.arguments as String;
+        var args = routeSettings.arguments as Map;
+        var rideId = args['rideId'] as String;
+        var context = args['context'] as BuildContext;
 
         return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (context) => DashboardBloc(),
+          builder: (_) => BlocProvider.value(
+            value: context.read<DashboardBloc>(),
             child: RideDetailsScreen(rideId: rideId),
           ),
         );
 
-      // case '/startNewRide':
-      //   return MaterialPageRoute(builder: (_) => const RideActivityHome());
+      case '/ride/rideScore':
+        var context = routeSettings.arguments as BuildContext;
+
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: context.read<AppNavigationCubit>()),
+              BlocProvider.value(value: context.read<RideActivityCubit>()),
+            ],
+            child: const RideActivityScoreScreen(),
+          ),
+        );
 
       default:
         return null;

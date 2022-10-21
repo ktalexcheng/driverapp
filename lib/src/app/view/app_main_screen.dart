@@ -15,10 +15,7 @@ class AppMainScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => AppNavigationCubit(),
       child: Scaffold(
-        // appBar: AppBar(
-        //   title: const Text('TrailBrake'),
-        // ),
-        bottomNavigationBar: const AppNavigationBar(),
+        bottomNavigationBar: const AppNavigationBar(initialIndex: 2),
         body: BlocBuilder<AppNavigationCubit, AppNavigationState>(
           buildWhen: (previous, current) {
             if (previous != current) {
@@ -29,11 +26,11 @@ class AppMainScreen extends StatelessWidget {
           },
           builder: (context, state) {
             if (state is AppNavigationInitial) {
-              return const DashboardMainScreen();
+              return const UserProfileScreen();
             } else if (state is AppNavigationLoadDashboardSuccess) {
               return const DashboardMainScreen();
             } else if (state is AppNavigationStartRideSuccess) {
-              return const RideActivityHome();
+              return const RideActivityMainScreen();
             } else if (state is AppNavigationLoadProfileSuccess) {
               return const UserProfileScreen();
             } else {

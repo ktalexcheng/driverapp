@@ -126,7 +126,14 @@ class RideDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Ride Details'),
       ),
-      body: BlocBuilder<DashboardBloc, DashboardState>(
+      body: BlocConsumer<DashboardBloc, DashboardState>(
+        listener: (context, state) {
+          if (state is DashboardDeleteRideSuccess) {
+            context.read<DashboardBloc>().add(DashboardCatalogRequested());
+
+            Navigator.of(context).pop();
+          }
+        },
         builder: (context, state) {
           if (state is DashboardGetRideSuccess) {
             return Padding(
@@ -143,18 +150,12 @@ class RideDetailsScreen extends StatelessWidget {
                       Text(DateFormat.yMMMd()
                           .add_jms()
                           .format(state.fetchedRide.rideDate)),
-                      const SizedBox(height: 16),
-                      const Text("Ride score"),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
-                    children: const [
-                      Text("85", style: TextStyle(fontSize: 50)),
-                      Text("/100"),
-                    ],
+                  constants.rowSpacer,
+                  const Scorecard(
+                    title: "Ride score",
+                    score: 85,
                   ),
                   const SectionTitle(title: "Telemetry"),
                   TelemetryChart(
@@ -192,69 +193,15 @@ class RideDetailsScreen extends StatelessWidget {
                           context
                               .read<DashboardBloc>()
                               .add(DashboardDeleteRideRequested(rideId));
-
-                          context
-                              .read<DashboardBloc>()
-                              .add(DashboardCatalogRequested());
-
-                          Navigator.of(context).pop();
                         }
                       });
                     },
                   ),
-                  // const SectionTitle(title: "Other metrics"),
-                  // GridView.count(
-                  //   physics: const NeverScrollableScrollPhysics(),
-                  //   crossAxisCount: 3,
-                  //   shrinkWrap: true,
-                  //   padding: const EdgeInsets.all(8),
-                  //   mainAxisSpacing: 8,
-                  //   crossAxisSpacing: 8,
-                  //   children: [
-                  //     RideDetailsMetric(
-                  //       title: "Observations:",
-                  //       body: state.fetchedRide.observations.toString(),
-                  //     ),
-                  //     RideDetailsMetric(
-                  //       title: "Duration:",
-                  //       body: formatDuration(state.fetchedRide.duration),
-                  //     ),
-                  //     RideDetailsMetric(
-                  //       title: "Distance (km):",
-                  //       body: state.fetchedRide.distance.toStringAsFixed(1),
-                  //     ),
-                  //     RideDetailsMetric(
-                  //       title: "Average speed (km/h):",
-                  //       body: state.fetchedRide.avgSpeed.toStringAsFixed(1),
-                  //     ),
-                  //     RideDetailsMetric(
-                  //       title: "Average moving speed (km/h):",
-                  //       body: state.fetchedRide.avgMovingSpeed
-                  //           .toStringAsFixed(1),
-                  //     ),
-                  //     RideDetailsMetric(
-                  //       title: "Average acceleration (g):",
-                  //       body: state.fetchedRide.avgAbsAcceleration
-                  //           .toStringAsFixed(3),
-                  //     ),
-                  //     RideDetailsMetric(
-                  //       title: "Max acceleration (g):",
-                  //       body: state.fetchedRide.maxAbsAcceleration
-                  //           .toStringAsFixed(3),
-                  //     ),
-                  //     RideDetailsMetric(
-                  //       title: "Std dev acceleration (g):",
-                  //       body: state.fetchedRide.stdDevAcceleration
-                  //           .toStringAsFixed(3),
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
             );
-          }
-          if (state is DashboardGetRideFailure) {
-            return const Center(child: Text("This ride has been deleted."));
+          } else if (state is DashboardGetRideFailure) {
+            return const Center(child: Text(constants.missingRideMessage));
           } else {
             return const Center(
               child: CircularProgressIndicator(),

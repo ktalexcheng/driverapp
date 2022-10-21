@@ -48,6 +48,7 @@ class DashboardMainScreen extends StatelessWidget {
                     child: SizedBox.expand(
                       child: DefaultTabController(
                         length: 2,
+                        initialIndex: 1,
                         child: Column(
                           children: [
                             Row(
@@ -66,6 +67,7 @@ class DashboardMainScreen extends StatelessWidget {
                             Expanded(
                               child: TabBarView(
                                 children: [
+                                  const Text("NOT YET IMPLEMENTED"),
                                   RefreshIndicator(
                                     onRefresh: () async => context
                                         .read<DashboardBloc>()
@@ -86,7 +88,6 @@ class DashboardMainScreen extends StatelessWidget {
                                       },
                                     ),
                                   ),
-                                  const Text("NOT YET IMPLEMENTED"),
                                 ],
                               ),
                             ),

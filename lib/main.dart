@@ -23,7 +23,6 @@ class TrailBrakeApp extends StatelessWidget {
       darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
       themeMode: ThemeMode.dark,
       home: const AppMainScreen(),
-      // initialRoute: '/',
       onGenerateRoute: _appRouter.onGenerateRoute,
     );
   }

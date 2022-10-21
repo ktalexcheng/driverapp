@@ -1,6 +1,5 @@
 import 'package:trailbrake/src/ride/data/model/model.dart';
 
-// class Ride extends RideMeta with RideDataMixin {
 class Ride with RideMetaMixin, RideDataMixin {
   Ride({
     required id,
@@ -30,7 +29,6 @@ class Ride with RideMetaMixin, RideDataMixin {
     );
   }
 
-  // @override
   Map<String, dynamic> toJson() {
     List<Map<String, dynamic>> _jsonList = [];
 

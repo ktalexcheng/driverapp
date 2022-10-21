@@ -33,15 +33,6 @@ class SensorData {
     gyroscopeX = _jsonValueToDouble(json['gyroscopeX']);
     gyroscopeY = _jsonValueToDouble(json['gyroscopeY']);
     gyroscopeZ = _jsonValueToDouble(json['gyroscopeZ']);
-
-    // accelerometerX = json['accelerometerX'];
-    // accelerometerY = json['accelerometerY'];
-    // accelerometerZ = json['accelerometerZ'];
-    // gyroscopeX = json['gyroscopeX'];
-    // gyroscopeY = json['gyroscopeY'];
-    // gyroscopeZ = json['gyroscopeZ'];
-    // locationLat = json['locationLat'];
-    // locationLong = json['locationLong'];
   }
 
   Map<String, dynamic> toJson() {

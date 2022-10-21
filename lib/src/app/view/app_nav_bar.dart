@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trailbrake/src/app/cubit/cubit.dart';
-// import 'package:trailbrake/src/dashboard/dashboard.dart';
-// import 'package:trailbrake/src/ride/ride.dart';
-// import 'package:trailbrake/src/profile/view/view.dart';
 
 class AppNavigationBar extends StatelessWidget {
-  const AppNavigationBar({super.key});
+  const AppNavigationBar({super.key, required this.initialIndex});
+
+  final int initialIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +14,7 @@ class AppNavigationBar extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     int _selectedIndex(AppNavigationState state) {
-      int index = 0; // Show "Profile" page on initial landing
+      int index = initialIndex; // Show "Profile" page on initial landing
 
       if (state is AppNavigationLoadDashboardSuccess) {
         index = 0;
