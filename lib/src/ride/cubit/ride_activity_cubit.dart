@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,16 +44,20 @@ class RideActivityCubit extends Cubit<RideActivityState> {
 
       RideDataAPI rideDataClient = RideDataAPI();
 
-      Ride ride = Ride(
-        id: null,
+      NewRide ride = NewRide(
         rideName: rideName,
         rideDate: DateTime.now(),
         rideData: rideDataRepository.rideData.data,
       );
 
-      await rideDataClient.saveRideData(ride);
+      APIResponse response = await rideDataClient.saveRideData(ride);
 
-      emit(RideActivityState(status: RideActivityStatus.saved));
+      if (response.httpCode == 201) {
+        emit(RideActivityState(status: RideActivityStatus.saved));
+      } else {
+        inspect(response);
+        emit(RideActivityState(status: RideActivityStatus.error));
+      }
     }
   }
 

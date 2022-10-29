@@ -79,11 +79,7 @@ class DashboardMainScreen extends StatelessWidget {
                                       itemCount: state.rideCatalog.length,
                                       itemBuilder: (context, index) {
                                         return RidePreviewCard(
-                                          rideId: state.rideCatalog[index].id!,
-                                          rideName:
-                                              state.rideCatalog[index].rideName,
-                                          rideDate:
-                                              state.rideCatalog[index].rideDate,
+                                          rideRecord: state.rideCatalog[index],
                                         );
                                       },
                                     ),

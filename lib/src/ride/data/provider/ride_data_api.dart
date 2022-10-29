@@ -3,21 +3,22 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:trailbrake/src/ride/data/data.dart';
+import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class RideDataAPI {
-  final String apiDomain = 'https://driverapp-2022.de.r.appspot.com';
+  final String apiDomain = constants.trailbrakeAPIURL;
   http.Client client = http.Client();
 
   Future<APIResponse> fetchRideCatalog() async {
     final response = await client.get(Uri.parse('$apiDomain/rides'));
 
-    final List<RideMeta> allRideHistory = <RideMeta>[];
+    final List<RideRecord> allRideHistory = <RideRecord>[];
 
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
 
       responseBody.forEach((element) {
-        allRideHistory.add(RideMeta.fromJson(element));
+        allRideHistory.add(RideRecord.fromJson(element));
       });
 
       return APIResponse(200, allRideHistory);
@@ -32,23 +33,25 @@ class RideDataAPI {
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
 
-      return APIResponse(200, Ride.fromJson(responseBody));
+      return APIResponse(200, SavedRide.fromJson(responseBody));
     } else {
       return APIResponse(response.statusCode, response.body);
     }
   }
 
-  Future<APIResponse> saveRideData(Ride postBody) async {
+  Future<APIResponse> saveRideData(NewRide postBody) async {
+    print(jsonEncode(postBody));
     final response = await client.post(
       Uri.parse('$apiDomain/rides'),
       headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(postBody),
     );
+    final responseJson = jsonDecode(response.body);
 
     if (response.statusCode == 201) {
-      return APIResponse(201, true);
+      return APIResponse(201, RideRecord.fromJson(responseJson['rideRecord']));
     } else {
-      return APIResponse(response.statusCode, false);
+      return APIResponse(response.statusCode, responseJson);
     }
   }
 

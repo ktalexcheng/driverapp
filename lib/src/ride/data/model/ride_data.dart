@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:trailbrake/src/ride/data/model/model.dart';
+import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class RideData with RideDataMixin {
   RideData({rideData}) {
@@ -13,26 +14,26 @@ class RideData with RideDataMixin {
     }
   }
 
-  factory RideData.fromJson(List<dynamic> jsonList) {
-    List<SensorData> _data = <SensorData>[];
-    if (jsonList.isNotEmpty) {
-      for (var data in jsonList) {
-        _data.add(SensorData.fromJson(data));
-      }
-    }
+  // RideData.fromJson(List<dynamic> jsonList) {
+  //   List<SensorData> _data = <SensorData>[];
+  //   if (jsonList.isNotEmpty) {
+  //     for (var data in jsonList) {
+  //       _data.add(SensorData.fromJson(data));
+  //     }
+  //   }
 
-    return RideData(rideData: _data);
-  }
+  //   super.data = _data;
+  // }
 
-  List<Map<String, dynamic>> toJson() {
-    List<Map<String, dynamic>> _jsonList = [];
+  // List<Map<String, dynamic>> toJson() {
+  //   List<Map<String, dynamic>> _rideDataJson = [];
 
-    for (var element in data) {
-      _jsonList.add(element.toJson());
-    }
+  //   for (var element in data) {
+  //     _rideDataJson.add(element.toJson());
+  //   }
 
-    return _jsonList;
-  }
+  //   return _rideDataJson;
+  // }
 }
 
 mixin RideDataMixin {
@@ -54,8 +55,6 @@ mixin RideDataMixin {
   int get length => data.length;
   SensorData get first => data.first;
   SensorData get last => data.last;
-
-  static double gravity = 9.8;
 
   int _calcObservations() {
     int obs = 0;
@@ -178,7 +177,7 @@ mixin RideDataMixin {
           absAcc.reduce((value, element) => value + element) / absAcc.length;
     }
 
-    return (avgAbsAcc / gravity);
+    return (avgAbsAcc / constants.gravity);
   }
 
   double _calcMaxAbsAcceleration() {
@@ -190,7 +189,7 @@ mixin RideDataMixin {
       });
     }
 
-    return (maxAbsAcc / gravity);
+    return (maxAbsAcc / constants.gravity);
   }
 
   double _calcStdDevAcceleration() {
@@ -209,6 +208,6 @@ mixin RideDataMixin {
       stdDevAcc = sqrt(sqDiff / absAcc.length);
     }
 
-    return (stdDevAcc / gravity);
+    return (stdDevAcc / constants.gravity);
   }
 }

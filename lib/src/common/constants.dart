@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+/// API endpoints
+// const String trailbrakeAPIURL = 'https://driverapp-2022.de.r.appspot.com';
+const String trailbrakeAPIURL = 'http://192.168.50.107:8080';
+
 /// Spacing options
 const double widgetSpacing = 16;
 const double widgetSpacingSmall = 8;
@@ -23,3 +27,12 @@ const String saveRidePromptMessage =
     "Would you like to save data for this ride?";
 const String savingInProgressMessage = "Saving ride...";
 const String saveSuccessfulMessage = "Ride saved!";
+
+/// Ride metrics
+enum RideActivityMetrics {
+  timeElapsed,
+  speed,
+}
+
+/// Gravity
+const double gravity = 9.81;

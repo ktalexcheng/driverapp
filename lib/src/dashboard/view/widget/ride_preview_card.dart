@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:trailbrake/src/ride/ride.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class PreviewCardMetrics extends StatelessWidget {
@@ -20,21 +21,17 @@ class PreviewCardMetrics extends StatelessWidget {
 class RidePreviewCard extends StatelessWidget {
   const RidePreviewCard({
     super.key,
-    required this.rideId,
-    required this.rideName,
-    required this.rideDate,
+    required this.rideRecord,
   });
 
-  final String rideId;
-  final String rideName;
-  final DateTime rideDate;
+  final RideRecord rideRecord;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (() {
         Map args = {
-          'rideId': rideId,
+          'rideId': rideRecord.id,
           'context': context,
         };
         Navigator.of(context)
@@ -54,29 +51,36 @@ class RidePreviewCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          rideName,
+                          rideRecord.rideName,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Expanded(
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              DateFormat.yMMMMd().add_Hm().format(rideDate),
+                              DateFormat.yMMMMd()
+                                  .add_Hm()
+                                  .format(rideRecord.rideDate),
                             ),
                           ),
                         ),
                       ],
                     ),
                     constants.rowSpacer,
-                    const PreviewCardMetrics(text: "Distance: 10.2 km"),
-                    const PreviewCardMetrics(text: "Duration: 32:15"),
-                    const PreviewCardMetrics(text: "Max acceleration: 1.1 g"),
+                    PreviewCardMetrics(
+                        text: "Distance: ${rideRecord.rideMeta.distanceKm} km"),
+                    PreviewCardMetrics(
+                        text:
+                            "Duration: ${rideRecord.rideMeta.durationFormatted}"),
+                    PreviewCardMetrics(
+                        text:
+                            "Max acceleration: ${rideRecord.rideMeta.maxAccelerationG} g"),
                   ],
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Text(
-                    "85",
+                    rideRecord.rideScore.overall.toString(),
                     style: Theme.of(context).textTheme.displayMedium,
                   ),
                 ),

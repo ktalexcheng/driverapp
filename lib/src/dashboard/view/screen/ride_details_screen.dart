@@ -153,9 +153,9 @@ class RideDetailsScreen extends StatelessWidget {
                     ],
                   ),
                   constants.rowSpacer,
-                  const Scorecard(
+                  Scorecard(
                     title: "Ride score",
-                    score: 85,
+                    score: state.fetchedRide.rideScore.overall,
                   ),
                   const SectionTitle(title: "Telemetry"),
                   TelemetryChart(

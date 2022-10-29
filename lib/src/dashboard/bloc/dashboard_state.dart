@@ -4,8 +4,8 @@ part of 'dashboard_bloc.dart';
 // https://bloclibrary.dev/#/blocnamingconventions?id=state-conventions
 @immutable
 abstract class DashboardState {
-  List<RideMeta> get rideCatalog;
-  Ride get fetchedRide;
+  List<RideRecord> get rideCatalog;
+  SavedRide get fetchedRide;
 }
 
 class DashboardInitial extends DashboardState {
@@ -26,7 +26,7 @@ class DashboardGetCatalogSuccess extends DashboardState {
   }
 
   @override
-  final List<RideMeta> rideCatalog;
+  final List<RideRecord> rideCatalog;
 
   void _sortRideCatalog([int Function(dynamic, dynamic)? compare]) {
     if (compare != null) {
@@ -56,7 +56,7 @@ class DashboardGetRideSuccess extends DashboardState {
   });
 
   @override
-  final Ride fetchedRide;
+  final SavedRide fetchedRide;
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);

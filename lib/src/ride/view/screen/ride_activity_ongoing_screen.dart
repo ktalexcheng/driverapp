@@ -7,15 +7,38 @@ import 'package:trailbrake/src/common/common.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class ActiveRideMetrics extends StatelessWidget {
-  const ActiveRideMetrics({super.key, required this.metricName});
+  const ActiveRideMetrics({super.key, required this.metric});
 
-  final String metricName;
+  final constants.RideActivityMetrics metric;
 
   @override
   Widget build(BuildContext context) {
+    String metricName = metric.toString().split('.').last;
+
     return Card(
       child: Column(
-        children: [Text(metricName)],
+        children: [
+          Text(metricName),
+          BlocBuilder<RideActivityCubit, RideActivityState>(
+            builder: (context, state) {
+              dynamic metricValue;
+
+              switch (metric) {
+                case constants.RideActivityMetrics.speed:
+                  metricValue = state.newSensorData.accelerometerX.toString();
+                  break;
+                default:
+                  metricValue = state.newSensorData.timestamp.toString();
+              }
+
+              if (state.status == RideActivityStatus.running) {
+                return Text(metricValue);
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -72,9 +95,17 @@ class RideActivityOngoingScreen extends StatelessWidget {
               children: [
                 Row(
                   children: const [
-                    Expanded(child: ActiveRideMetrics(metricName: "Metric 1")),
+                    Expanded(
+                      child: ActiveRideMetrics(
+                        metric: constants.RideActivityMetrics.timeElapsed,
+                      ),
+                    ),
                     constants.columnSpacer,
-                    Expanded(child: ActiveRideMetrics(metricName: "Metric 2")),
+                    Expanded(
+                      child: ActiveRideMetrics(
+                        metric: constants.RideActivityMetrics.speed,
+                      ),
+                    ),
                   ],
                 ),
               ],

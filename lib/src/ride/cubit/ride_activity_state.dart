@@ -1,6 +1,6 @@
 part of 'ride_activity_cubit.dart';
 
-enum RideActivityStatus { ready, running, paused, saving, saved }
+enum RideActivityStatus { ready, running, paused, saving, saved, error }
 
 class RideActivityState {
   RideActivityState({
