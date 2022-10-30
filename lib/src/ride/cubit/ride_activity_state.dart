@@ -7,6 +7,7 @@ class RideActivityState {
     required this.status,
     newSensorData,
     elapsedSeconds,
+    this.rideScore,
   }) {
     this.newSensorData = newSensorData ?? SensorData();
     this.elapsedSeconds = elapsedSeconds ?? const Duration();
@@ -15,4 +16,5 @@ class RideActivityState {
   RideActivityStatus status;
   late SensorData newSensorData;
   late Duration elapsedSeconds;
+  RideScore? rideScore;
 }

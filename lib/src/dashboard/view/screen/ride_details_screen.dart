@@ -120,22 +120,22 @@ class RideDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<DashboardBloc>().add(DashboardDataRequested(rideId));
+    context.read<RideDetailsBloc>().add(RideDetailsGetRequested(rideId));
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Ride Details'),
       ),
-      body: BlocConsumer<DashboardBloc, DashboardState>(
+      body: BlocConsumer<RideDetailsBloc, RideDetailsState>(
         listener: (context, state) {
-          if (state is DashboardDeleteRideSuccess) {
+          if (state is RideDetailsDeleteSuccess) {
             context.read<DashboardBloc>().add(DashboardCatalogRequested());
 
             Navigator.of(context).pop();
           }
         },
         builder: (context, state) {
-          if (state is DashboardGetRideSuccess) {
+          if (state is RideDetailsGetSuccess) {
             return Padding(
               padding: constants.appDefaultPadding,
               child: ListView(
@@ -144,42 +144,42 @@ class RideDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        state.fetchedRide.rideName,
+                        state.savedRide.rideName,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(DateFormat.yMMMd()
                           .add_jms()
-                          .format(state.fetchedRide.rideDate)),
+                          .format(state.savedRide.rideDate)),
                     ],
                   ),
                   constants.rowSpacer,
                   Scorecard(
                     title: "Ride score",
-                    score: state.fetchedRide.rideScore.overall,
+                    score: state.savedRide.rideScore.overall,
                   ),
                   const SectionTitle(title: "Telemetry"),
                   TelemetryChart(
-                    rideData: state.fetchedRide.data,
+                    rideData: state.savedRide.data,
                     valueName: 'accelerometerX',
                   ),
                   TelemetryChart(
-                    rideData: state.fetchedRide.data,
+                    rideData: state.savedRide.data,
                     valueName: 'accelerometerY',
                   ),
                   TelemetryChart(
-                    rideData: state.fetchedRide.data,
+                    rideData: state.savedRide.data,
                     valueName: 'accelerometerZ',
                   ),
                   TelemetryChart(
-                    rideData: state.fetchedRide.data,
+                    rideData: state.savedRide.data,
                     valueName: 'gyroscopeX',
                   ),
                   TelemetryChart(
-                    rideData: state.fetchedRide.data,
+                    rideData: state.savedRide.data,
                     valueName: 'gyroscopeY',
                   ),
                   TelemetryChart(
-                    rideData: state.fetchedRide.data,
+                    rideData: state.savedRide.data,
                     valueName: 'gyroscopeZ',
                   ),
                   TextButton(
@@ -191,8 +191,8 @@ class RideDetailsScreen extends StatelessWidget {
                       ).then((ifDelete) {
                         if (ifDelete) {
                           context
-                              .read<DashboardBloc>()
-                              .add(DashboardDeleteRideRequested(rideId));
+                              .read<RideDetailsBloc>()
+                              .add(RideDetailsDeleteRequested(rideId));
                         }
                       });
                     },
@@ -200,7 +200,7 @@ class RideDetailsScreen extends StatelessWidget {
                 ],
               ),
             );
-          } else if (state is DashboardGetRideFailure) {
+          } else if (state is RideDetailsGetFailure) {
             return const Center(child: Text(constants.missingRideMessage));
           } else {
             return const Center(

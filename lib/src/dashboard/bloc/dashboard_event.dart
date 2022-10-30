@@ -8,15 +8,3 @@ abstract class DashboardEvent {}
 class DashboardStarted extends DashboardEvent {}
 
 class DashboardCatalogRequested extends DashboardEvent {}
-
-class DashboardDataRequested extends DashboardEvent {
-  DashboardDataRequested(this.rideId);
-
-  final String rideId;
-}
-
-class DashboardDeleteRideRequested extends DashboardEvent {
-  DashboardDeleteRideRequested(this.rideId);
-
-  final String rideId;
-}

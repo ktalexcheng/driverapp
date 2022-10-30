@@ -42,30 +42,6 @@ mixin RideRecordMixin {
   late final RideMeta rideMeta;
 }
 
-class RideScore {
-  RideScore({
-    required this.overall,
-    required this.acceleration,
-    required this.braking,
-    required this.cornering,
-    required this.speed,
-  });
-
-  RideScore.fromJson(Map<String, dynamic> json) {
-    overall = json['overall'];
-    acceleration = json['acceleration'];
-    braking = json['braking'];
-    cornering = json['cornering'];
-    speed = json['speed'];
-  }
-
-  late final int overall;
-  late final int acceleration;
-  late final int braking;
-  late final int cornering;
-  late final int speed;
-}
-
 class RideMeta {
   RideMeta({
     required this.duration,
@@ -73,15 +49,19 @@ class RideMeta {
     required this.maxAcceleration,
   });
 
-  RideMeta.fromJson(Map<String, dynamic> json) {
-    duration = Duration(seconds: json['duration'].toInt());
-    distance = json['distance'].toDouble();
-    maxAcceleration = json['maxAcceleration'].toDouble();
-  }
+  RideMeta.fromJson(Map<String, dynamic> json)
+      : duration = Duration(seconds: json['duration'].toInt()),
+        distance = json['distance'].toDouble(),
+        maxAcceleration = json['maxAcceleration'].toDouble();
+  // {
+  //   duration = Duration(seconds: json['duration'].toInt());
+  //   distance = json['distance'].toDouble();
+  //   maxAcceleration = json['maxAcceleration'].toDouble();
+  // }
 
-  late final Duration duration;
-  late final double distance;
-  late final double maxAcceleration;
+  final Duration duration;
+  final double distance;
+  final double maxAcceleration;
 
   String get distanceKm {
     return (distance / 1000).toStringAsFixed(1);

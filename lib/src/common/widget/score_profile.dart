@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'package:trailbrake/src/common/common.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class ScoreProfile extends StatelessWidget {
-  const ScoreProfile({super.key});
+  const ScoreProfile({super.key, required this.scores});
 
-  Widget profileBar(String title, int score) {
+  final RideScore scores;
+
+  Widget profileBar(String title, double score) {
     return Row(
       children: [
         ConstrainedBox(
@@ -30,13 +33,13 @@ class ScoreProfile extends StatelessWidget {
         padding: constants.appDefaultPadding,
         child: Column(
           children: [
-            profileBar("Speed", 69),
+            profileBar("Speed", scores.speed),
             constants.rowSpacer,
-            profileBar("Acceleration", 34),
+            profileBar("Acceleration", scores.acceleration),
             constants.rowSpacer,
-            profileBar("Breaking", 89),
+            profileBar("Braking", scores.braking),
             constants.rowSpacer,
-            profileBar("Cornering", 95),
+            profileBar("Cornering", scores.cornering),
           ],
         ),
       ),

@@ -14,8 +14,11 @@ class AppRouter {
         var context = args['context'] as BuildContext;
 
         return MaterialPageRoute(
-          builder: (_) => BlocProvider.value(
-            value: context.read<DashboardBloc>(),
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: context.read<DashboardBloc>()),
+              BlocProvider(create: (context) => RideDetailsBloc()),
+            ],
             child: RideDetailsScreen(rideId: rideId),
           ),
         );

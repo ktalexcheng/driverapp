@@ -5,7 +5,6 @@ part of 'dashboard_bloc.dart';
 @immutable
 abstract class DashboardState {
   List<RideRecord> get rideCatalog;
-  SavedRide get fetchedRide;
 }
 
 class DashboardInitial extends DashboardState {
@@ -41,43 +40,6 @@ class DashboardGetCatalogSuccess extends DashboardState {
 }
 
 class DashboardGetCatalogFailure extends DashboardState {
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
-}
-
-class DashboardGetRideInProgress extends DashboardState {
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
-}
-
-class DashboardGetRideSuccess extends DashboardState {
-  DashboardGetRideSuccess({
-    required this.fetchedRide,
-  });
-
-  @override
-  final SavedRide fetchedRide;
-
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
-}
-
-class DashboardGetRideFailure extends DashboardState {
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
-}
-
-class DashboardDeleteRideInProgress extends DashboardState {
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
-}
-
-class DashboardDeleteRideSuccess extends DashboardState {
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
-}
-
-class DashboardDeleteRideFailure extends DashboardState {
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

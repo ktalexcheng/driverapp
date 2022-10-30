@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,11 +25,13 @@ class ActiveRideMetrics extends StatelessWidget {
               dynamic metricValue;
 
               switch (metric) {
-                case constants.RideActivityMetrics.speed:
-                  metricValue = state.newSensorData.accelerometerX.toString();
+                case constants.RideActivityMetrics.accelerometerX:
+                  metricValue =
+                      state.newSensorData.accelerometerX?.toStringAsFixed(3);
                   break;
                 default:
-                  metricValue = state.newSensorData.timestamp.toString();
+                  metricValue =
+                      DateFormat.Hms().format(state.newSensorData.timestamp);
               }
 
               if (state.status == RideActivityStatus.running) {
@@ -103,7 +106,7 @@ class RideActivityOngoingScreen extends StatelessWidget {
                     constants.columnSpacer,
                     Expanded(
                       child: ActiveRideMetrics(
-                        metric: constants.RideActivityMetrics.speed,
+                        metric: constants.RideActivityMetrics.accelerometerX,
                       ),
                     ),
                   ],

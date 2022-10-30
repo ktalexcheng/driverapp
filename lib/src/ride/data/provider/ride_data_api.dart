@@ -5,11 +5,18 @@ import 'package:http/http.dart' as http;
 import 'package:trailbrake/src/ride/data/data.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
 
+class RideDataAPIResponse {
+  RideDataAPIResponse(this.httpCode, this.responseBody);
+
+  final int httpCode;
+  dynamic responseBody;
+}
+
 class RideDataAPI {
-  final String apiDomain = constants.trailbrakeAPIURL;
+  final String apiDomain = constants.trailbrakeApiUrl;
   http.Client client = http.Client();
 
-  Future<APIResponse> fetchRideCatalog() async {
+  Future<RideDataAPIResponse> getRideCatalog() async {
     final response = await client.get(Uri.parse('$apiDomain/rides'));
 
     final List<RideRecord> allRideHistory = <RideRecord>[];
@@ -21,26 +28,25 @@ class RideDataAPI {
         allRideHistory.add(RideRecord.fromJson(element));
       });
 
-      return APIResponse(200, allRideHistory);
+      return RideDataAPIResponse(200, allRideHistory);
     } else {
-      return APIResponse(response.statusCode, response.body);
+      return RideDataAPIResponse(response.statusCode, response.body);
     }
   }
 
-  Future<APIResponse> fetchRideData(String id) async {
+  Future<RideDataAPIResponse> getRideData(String id) async {
     final response = await client.get(Uri.parse('$apiDomain/rides/$id'));
 
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
 
-      return APIResponse(200, SavedRide.fromJson(responseBody));
+      return RideDataAPIResponse(200, SavedRide.fromJson(responseBody));
     } else {
-      return APIResponse(response.statusCode, response.body);
+      return RideDataAPIResponse(response.statusCode, response.body);
     }
   }
 
-  Future<APIResponse> saveRideData(NewRide postBody) async {
-    print(jsonEncode(postBody));
+  Future<RideDataAPIResponse> saveRideData(NewRide postBody) async {
     final response = await client.post(
       Uri.parse('$apiDomain/rides'),
       headers: <String, String>{'Content-Type': 'application/json'},
@@ -49,19 +55,20 @@ class RideDataAPI {
     final responseJson = jsonDecode(response.body);
 
     if (response.statusCode == 201) {
-      return APIResponse(201, RideRecord.fromJson(responseJson['rideRecord']));
+      return RideDataAPIResponse(
+          201, RideRecord.fromJson(responseJson['rideRecord']));
     } else {
-      return APIResponse(response.statusCode, responseJson);
+      return RideDataAPIResponse(response.statusCode, responseJson);
     }
   }
 
-  Future<APIResponse> deleteRideData(String id) async {
+  Future<RideDataAPIResponse> deleteRideData(String id) async {
     final response = await client.delete(Uri.parse('$apiDomain/rides/$id'));
 
     if (response.statusCode == 200) {
-      return APIResponse(200, true);
+      return RideDataAPIResponse(200, true);
     } else {
-      return APIResponse(response.statusCode, false);
+      return RideDataAPIResponse(response.statusCode, false);
     }
   }
 }

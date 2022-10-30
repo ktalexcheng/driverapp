@@ -1,34 +1,76 @@
 import 'package:flutter/material.dart';
-// import 'package:intl/intl.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:trailbrake/src/profile/profile.dart';
+import 'package:trailbrake/src/common/common.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class LifetimeMetricCard extends StatelessWidget {
-  const LifetimeMetricCard(
-      {super.key,
-      required this.type,
-      required this.title,
-      required this.value});
+  const LifetimeMetricCard({
+    super.key,
+    required this.type,
+  });
 
   final String type;
-  final String title;
-  final dynamic value;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Padding(
-        padding: constants.appDefaultPadding,
-        child: Column(
-          children: [
-            Text(title),
-            Text(value),
-          ],
-        ),
-      ),
+    String title;
+    switch (type) {
+      case 'totalDistance':
+        title = 'Distance Driven';
+        break;
+
+      case 'totalDuration':
+        title = 'Time Driven';
+        break;
+
+      case 'maxAcceleration':
+        title = 'Max Acceleration';
+        break;
+
+      default:
+        title = 'ERROR';
+        break;
+    }
+
+    return BlocBuilder<UserProfileCubit, UserProfileState>(
+      builder: (context, state) {
+        dynamic value = state.user.stats.getMetric(type);
+        String display;
+        switch (type) {
+          case 'totalDistance':
+            display = '${(value / 1000).toStringAsFixed(3)} km';
+            break;
+
+          case 'totalDuration':
+            display = formatDuration(value);
+            break;
+
+          case 'maxAcceleration':
+            display = '${(value / constants.gravity).toStringAsFixed(3)} G';
+            break;
+
+          default:
+            display = 'N/A';
+            break;
+        }
+
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Padding(
+            padding: constants.appDefaultPadding,
+            child: Column(
+              children: [
+                Text(title),
+                Text(display),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

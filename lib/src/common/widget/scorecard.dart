@@ -4,7 +4,7 @@ class Scorecard extends StatelessWidget {
   const Scorecard({super.key, required this.title, required this.score});
 
   final String title;
-  final int score;
+  final double score;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,8 @@ class Scorecard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            Text(score.toString(), style: const TextStyle(fontSize: 50)),
+            Text(score.toStringAsFixed(1),
+                style: const TextStyle(fontSize: 50)),
             const Text("/100"),
           ],
         ),

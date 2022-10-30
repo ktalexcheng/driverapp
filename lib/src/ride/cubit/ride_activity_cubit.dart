@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:trailbrake/src/common/common.dart';
 import 'package:trailbrake/src/ride/data/data.dart';
 
 part 'ride_activity_state.dart';
@@ -50,12 +50,13 @@ class RideActivityCubit extends Cubit<RideActivityState> {
         rideData: rideDataRepository.rideData.data,
       );
 
-      APIResponse response = await rideDataClient.saveRideData(ride);
+      RideDataAPIResponse response = await rideDataClient.saveRideData(ride);
 
       if (response.httpCode == 201) {
-        emit(RideActivityState(status: RideActivityStatus.saved));
+        emit(RideActivityState(
+            status: RideActivityStatus.saved,
+            rideScore: response.responseBody.rideScore));
       } else {
-        inspect(response);
         emit(RideActivityState(status: RideActivityStatus.error));
       }
     }

@@ -26,21 +26,9 @@ class DashboardMainScreen extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: const [
-                        LifetimeMetricCard(
-                          type: 'distance',
-                          title: "Distance travelled",
-                          value: "4029.1 km",
-                        ),
-                        LifetimeMetricCard(
-                          type: 'distance',
-                          title: "Distance travelled",
-                          value: "4029.1 km",
-                        ),
-                        LifetimeMetricCard(
-                          type: 'distance',
-                          title: "Distance travelled",
-                          value: "4029.1 km",
-                        ),
+                        LifetimeMetricCard(type: 'totalDistance'),
+                        LifetimeMetricCard(type: 'totalDuration'),
+                        LifetimeMetricCard(type: 'maxAcceleration'),
                       ],
                     ),
                   ),
