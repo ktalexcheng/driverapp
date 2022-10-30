@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// API endpoints
-// const String trailbrakeAPIURL = 'https://driverapp-2022.de.r.appspot.com';
-const String trailbrakeApiUrl = 'http://192.168.50.132:8080';
+const String trailbrakeApiUrl = 'https://driverapp-2022.de.r.appspot.com';
+// const String trailbrakeApiUrl = 'http://192.168.50.107:8080';
 
 /// Spacing options
 const double widgetSpacing = 16;

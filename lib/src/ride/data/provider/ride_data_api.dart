@@ -52,13 +52,14 @@ class RideDataAPI {
       headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(postBody),
     );
-    final responseJson = jsonDecode(response.body);
 
     if (response.statusCode == 201) {
+      final responseJson = jsonDecode(response.body);
+
       return RideDataAPIResponse(
           201, RideRecord.fromJson(responseJson['rideRecord']));
     } else {
-      return RideDataAPIResponse(response.statusCode, responseJson);
+      return RideDataAPIResponse(response.statusCode, response.body);
     }
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trailbrake/src/app/cubit/cubit.dart';
 import 'package:trailbrake/src/dashboard/dashboard.dart';
 import 'package:trailbrake/src/ride/ride.dart';
+import 'package:trailbrake/src/profile/profile.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings routeSettings) {
@@ -31,6 +32,7 @@ class AppRouter {
             providers: [
               BlocProvider.value(value: context.read<AppNavigationCubit>()),
               BlocProvider.value(value: context.read<RideActivityCubit>()),
+              BlocProvider.value(value: context.read<UserProfileCubit>()),
             ],
             child: const RideActivityScoreScreen(),
           ),

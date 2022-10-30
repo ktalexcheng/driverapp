@@ -158,26 +158,32 @@ class RideDetailsScreen extends StatelessWidget {
                     score: state.savedRide.rideScore.overall,
                   ),
                   const SectionTitle(title: "Telemetry"),
+                  const ComponentTitle(title: "Accelerometer X"),
                   TelemetryChart(
                     rideData: state.savedRide.data,
                     valueName: 'accelerometerX',
                   ),
+                  const ComponentTitle(title: "Accelerometer Y"),
                   TelemetryChart(
                     rideData: state.savedRide.data,
                     valueName: 'accelerometerY',
                   ),
+                  const ComponentTitle(title: "Accelerometer Z"),
                   TelemetryChart(
                     rideData: state.savedRide.data,
                     valueName: 'accelerometerZ',
                   ),
+                  const ComponentTitle(title: "Gyroscope X"),
                   TelemetryChart(
                     rideData: state.savedRide.data,
                     valueName: 'gyroscopeX',
                   ),
+                  const ComponentTitle(title: "Gyroscope Y"),
                   TelemetryChart(
                     rideData: state.savedRide.data,
                     valueName: 'gyroscopeY',
                   ),
+                  const ComponentTitle(title: "Gyroscope Z"),
                   TelemetryChart(
                     rideData: state.savedRide.data,
                     valueName: 'gyroscopeZ',

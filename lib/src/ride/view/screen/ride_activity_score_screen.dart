@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trailbrake/src/app/app.dart';
 import 'package:trailbrake/src/ride/cubit/cubit.dart';
+import 'package:trailbrake/src/profile/profile.dart';
 import 'package:trailbrake/src/common/common.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
 
@@ -15,6 +16,7 @@ class RideActivityGoToDashboardButton extends StatelessWidget {
       onPressed: () {
         context.read<RideActivityCubit>().initRide();
         context.read<AppNavigationCubit>().viewDashboard();
+        context.read<UserProfileCubit>().getUserProfileData();
         Navigator.of(context).pop();
       },
       child: const Text("Go to dashboard"),

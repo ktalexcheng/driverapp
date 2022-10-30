@@ -36,40 +36,49 @@ class LifetimeMetricCard extends StatelessWidget {
 
     return BlocBuilder<UserProfileCubit, UserProfileState>(
       builder: (context, state) {
-        dynamic value = state.user.stats.getMetric(type);
-        String display;
-        switch (type) {
-          case 'totalDistance':
-            display = '${(value / 1000).toStringAsFixed(3)} km';
-            break;
+        if (state is UserProfileGetSuccess) {
+          dynamic value = state.user.stats.getMetric(type);
+          String display;
+          switch (type) {
+            case 'totalDistance':
+              display = '${(value / 1000).toStringAsFixed(3)} km';
+              break;
 
-          case 'totalDuration':
-            display = formatDuration(value);
-            break;
+            case 'totalDuration':
+              display = formatDuration(value);
+              break;
 
-          case 'maxAcceleration':
-            display = '${(value / constants.gravity).toStringAsFixed(3)} G';
-            break;
+            case 'maxAcceleration':
+              display = '${(value / constants.gravity).toStringAsFixed(3)} G';
+              break;
 
-          default:
-            display = 'N/A';
-            break;
-        }
+            default:
+              display = 'N/A';
+              break;
+          }
 
-        return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Padding(
-            padding: constants.appDefaultPadding,
-            child: Column(
-              children: [
-                Text(title),
-                Text(display),
-              ],
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
             ),
-          ),
-        );
+            child: Padding(
+              padding: constants.appDefaultPadding,
+              child: Column(
+                children: [
+                  Text(title),
+                  Text(display),
+                ],
+              ),
+            ),
+          );
+        } else {
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Container(),
+          );
+        }
       },
     );
   }

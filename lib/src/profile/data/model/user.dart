@@ -31,8 +31,8 @@ class UserLifetimeStats {
 
   UserLifetimeStats.fromJson(Map<String, dynamic> json)
       : totalDuration = Duration(seconds: json['totalDuration'].round()),
-        totalDistance = json['totalDistance'],
-        maxAcceleration = json['maxAcceleration'];
+        totalDistance = json['totalDistance'] + 0.0,
+        maxAcceleration = json['maxAcceleration'] + 0.0;
 
   final Duration totalDuration;
   final double totalDistance;
