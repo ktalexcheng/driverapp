@@ -41,7 +41,7 @@ class AppMainScreen extends StatelessWidget {
               return const UserProfileScreen();
             } else if (state is AppNavigationLoadDashboardSuccess) {
               return const DashboardMainScreen();
-            } else if (state is AppNavigationStartRideSuccess) {
+            } else if (state is AppNavigationLoadRideSuccess) {
               return const RideActivityMainScreen();
             } else if (state is AppNavigationLoadProfileSuccess) {
               return const UserProfileScreen();

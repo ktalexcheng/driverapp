@@ -4,17 +4,17 @@ part of 'dashboard_bloc.dart';
 // https://bloclibrary.dev/#/blocnamingconventions?id=state-conventions
 @immutable
 abstract class DashboardState {
-  List<RideRecord> get rideCatalog;
+  // List<RideRecord> get rideCatalog;
 }
 
 class DashboardInitial extends DashboardState {
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+  // @override
+  // dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 class DashboardGetCatalogInProgress extends DashboardState {
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+  // @override
+  // dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 class DashboardGetCatalogSuccess extends DashboardState {
@@ -24,7 +24,7 @@ class DashboardGetCatalogSuccess extends DashboardState {
     _sortRideCatalog;
   }
 
-  @override
+  // @override
   final List<RideRecord> rideCatalog;
 
   void _sortRideCatalog([int Function(dynamic, dynamic)? compare]) {
@@ -35,11 +35,11 @@ class DashboardGetCatalogSuccess extends DashboardState {
     }
   }
 
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+  // @override
+  // dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 class DashboardGetCatalogFailure extends DashboardState {
-  @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+  // @override
+  // dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

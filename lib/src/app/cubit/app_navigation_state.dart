@@ -15,7 +15,7 @@ class AppNavigationLoadDashboardSuccess extends AppNavigationState {}
 
 // class AppNavigationStartRideInProgress extends AppNavigationState {}
 
-class AppNavigationStartRideSuccess extends AppNavigationState {}
+class AppNavigationLoadRideSuccess extends AppNavigationState {}
 
 // class AppNavigationStartRideFailure extends AppNavigationState {}
 

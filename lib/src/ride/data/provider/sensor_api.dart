@@ -40,6 +40,9 @@ class SensorAPI {
       locationRunning = true;
     }
   }
+
+  Future<Position> getCurrentLocation() => locationSensor.getCurrentLocation();
+  Future<Position?> getLastLocation() => locationSensor.getLastLocation();
 }
 
 // Accelerometer utilities
@@ -106,6 +109,11 @@ class LocationSensor {
   Future<bool> sensorStatus;
   Stream? locationStream;
 
+  static LocationSettings locationSettings = const LocationSettings(
+    accuracy: LocationAccuracy.bestForNavigation,
+    distanceFilter: 0,
+  );
+
   Future<bool> checkLocationStatus() async {
     locationEnabled = await Geolocator.isLocationServiceEnabled();
 
@@ -130,11 +138,6 @@ class LocationSensor {
 
   Future<Stream?> getLocationStream() async {
     if (await sensorStatus) {
-      const LocationSettings locationSettings = LocationSettings(
-        accuracy: LocationAccuracy.bestForNavigation,
-        distanceFilter: 0,
-      );
-
       Stream locationStream =
           Geolocator.getPositionStream(locationSettings: locationSettings);
 
@@ -142,5 +145,19 @@ class LocationSensor {
     } else {
       return null;
     }
+  }
+
+  Future<Position> getCurrentLocation() async {
+    Position nowLocation = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.bestForNavigation,
+    );
+
+    return nowLocation;
+  }
+
+  Future<Position?> getLastLocation() async {
+    Position? lastLocation = await Geolocator.getLastKnownPosition();
+
+    return lastLocation;
   }
 }

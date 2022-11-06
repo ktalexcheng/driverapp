@@ -21,15 +21,15 @@ class RideActivityStartButton extends StatelessWidget {
   }
 }
 
-class RideActivityReadyScreen extends StatelessWidget {
-  const RideActivityReadyScreen({super.key});
+class RideActivityLocationStatusBar extends StatelessWidget {
+  const RideActivityLocationStatusBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return AppCanvas(
-      child: Stack(
-        children: [
-          Positioned(
+    return BlocBuilder<RideActivityCubit, RideActivityState>(
+      builder: (context, state) {
+        if (state is RideActivityInitial) {
+          return Positioned(
             top: 0,
             left: 0,
             right: 0,
@@ -39,7 +39,24 @@ class RideActivityReadyScreen extends StatelessWidget {
               height: 40,
               child: const Text("Acquiring GPS..."),
             ),
-          ),
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+}
+
+class RideActivityReadyScreen extends StatelessWidget {
+  const RideActivityReadyScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppCanvas(
+      child: Stack(
+        children: [
+          const RideActivityLocationStatusBar(),
           Positioned(
             bottom: 0,
             left: 0,

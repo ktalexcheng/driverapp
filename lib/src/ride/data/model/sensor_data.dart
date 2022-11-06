@@ -9,6 +9,8 @@ class SensorData {
     this.accelerometerZ,
     this.locationLat,
     this.locationLong,
+    this.locationUpdated,
+    this.elapsedSeconds,
   }) {
     this.timestamp = timestamp ?? DateTime.now();
   }
@@ -22,6 +24,8 @@ class SensorData {
   late double? accelerometerZ;
   late double? locationLat;
   late double? locationLong;
+  late bool? locationUpdated;
+  late Duration? elapsedSeconds;
 
   SensorData.fromJson(Map<String, dynamic> json) {
     timestamp = DateTime.parse(json['timestamp']);

@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:trailbrake/src/common/common.dart';
 import 'package:trailbrake/src/ride/data/data.dart';
@@ -8,39 +10,45 @@ import 'package:trailbrake/src/ride/data/data.dart';
 part 'ride_activity_state.dart';
 
 class RideActivityCubit extends Cubit<RideActivityState> {
-  RideActivityCubit()
-      : super(RideActivityState(status: RideActivityStatus.ready));
+  RideActivityCubit() : super(RideActivityInitial()) {
+    prepareRide();
+  }
 
   ActiveRideRepository rideDataRepository = ActiveRideRepository();
   StreamSubscription? rideDataSubscription;
 
-  void initRide() {
-    rideDataRepository.clearRideData();
-    emit(RideActivityState(status: RideActivityStatus.ready));
+  void prepareRide() async {
+    await rideDataRepository.initRide();
+
+    emit(RideActivityPrepareSuccess(
+        initialLocation: rideDataRepository.initialLatLng));
   }
 
   void startRide() {
-    if (state.status != RideActivityStatus.running) {
-      rideDataRepository.startRide();
-      _listenToRideDataStream();
-    }
+    rideDataRepository.startRide();
+    _listenToRideDataStream();
   }
 
   void stopRide() {
-    if (state.status == RideActivityStatus.running) {
-      _cancelSubscription();
-      rideDataRepository.stopRide();
-      emit(RideActivityState(status: RideActivityStatus.paused));
-    }
+    _cancelSubscription();
+    rideDataRepository.stopRide();
+
+    emit(RideActivityPaused());
   }
 
-  // void resetRide() {
-  //   stopRide();
-  // }
+  void resetRide() {
+    _cancelSubscription();
+    rideDataRepository.stopRide();
+    rideDataRepository.clearRideData();
+    rideDataRepository.initRide();
+
+    emit(RideActivityPrepareSuccess(
+        initialLocation: rideDataRepository.initialLatLng));
+  }
 
   void saveRide(String rideName) async {
-    if (state.status == RideActivityStatus.paused) {
-      emit(RideActivityState(status: RideActivityStatus.saving));
+    if (state is RideActivityPaused) {
+      emit(RideActivitySaveInProgress());
 
       RideDataAPI rideDataClient = RideDataAPI();
 
@@ -53,18 +61,20 @@ class RideActivityCubit extends Cubit<RideActivityState> {
       RideDataAPIResponse response = await rideDataClient.saveRideData(ride);
 
       if (response.httpCode == 201) {
-        emit(RideActivityState(
-            status: RideActivityStatus.saved,
+        emit(RideActivitySaveSuccess(
             rideScore: response.responseBody.rideScore));
       } else {
-        emit(RideActivityState(status: RideActivityStatus.error));
+        emit(RideActivitySaveFailure());
       }
     }
   }
 
   void discardRide() async {
     rideDataRepository.clearRideData();
-    emit(RideActivityState(status: RideActivityStatus.ready));
+    rideDataRepository.initRide();
+
+    emit(RideActivityPrepareSuccess(
+        initialLocation: rideDataRepository.initialLatLng));
   }
 
   void _cancelSubscription() {
@@ -77,11 +87,7 @@ class RideActivityCubit extends Cubit<RideActivityState> {
     rideDataSubscription ??=
         rideDataRepository.rideDataStreamController.stream.listen(
       (event) {
-        emit(RideActivityState(
-          status: RideActivityStatus.running,
-          newSensorData: rideDataRepository.rideData.last,
-          elapsedSeconds: rideDataRepository.elapsedSeconds,
-        ));
+        emit(RideActivityNewRideInProgress(newSensorData: event));
       },
     );
   }

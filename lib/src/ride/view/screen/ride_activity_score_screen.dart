@@ -14,7 +14,7 @@ class RideActivityGoToDashboardButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        context.read<RideActivityCubit>().initRide();
+        context.read<RideActivityCubit>().resetRide();
         context.read<AppNavigationCubit>().viewDashboard();
         context.read<UserProfileCubit>().getUserProfileData();
         Navigator.of(context).pop();
@@ -34,7 +34,7 @@ class RideActivityScoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<RideActivityCubit, RideActivityState>(
       builder: (context, state) {
-        if (state.status == RideActivityStatus.saved) {
+        if (state is RideActivitySaveSuccess) {
           return Scaffold(
             body: AppCanvas(
               child: Stack(
@@ -43,9 +43,9 @@ class RideActivityScoreScreen extends StatelessWidget {
                     children: [
                       const ScreenTitle(title: "Ride completed!"),
                       Scorecard(
-                          title: "Ride score", score: state.rideScore!.overall),
+                          title: "Ride score", score: state.rideScore.overall),
                       const SectionTitle(title: "Score breakdown"),
-                      ScoreProfile(scores: state.rideScore!),
+                      ScoreProfile(scores: state.rideScore),
                     ],
                   ),
                   Positioned(

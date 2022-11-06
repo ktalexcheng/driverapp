@@ -55,6 +55,7 @@ mixin RideDataMixin {
   int get length => data.length;
   SensorData get first => data.first;
   SensorData get last => data.last;
+  Duration get elapsedSeconds => _calcElapsedSeconds();
 
   int _calcObservations() {
     int obs = 0;
@@ -209,5 +210,15 @@ mixin RideDataMixin {
     }
 
     return (stdDevAcc / constants.gravity);
+  }
+
+  Duration _calcElapsedSeconds() {
+    Duration _elapsedSeconds = const Duration();
+
+    if (_calcObservations() > 0) {
+      _elapsedSeconds = last.timestamp.difference(first.timestamp);
+    }
+
+    return _elapsedSeconds;
   }
 }

@@ -18,7 +18,7 @@ class AppNavigationBar extends StatelessWidget {
 
       if (state is AppNavigationLoadDashboardSuccess) {
         index = 0;
-      } else if (state is AppNavigationStartRideSuccess) {
+      } else if (state is AppNavigationLoadRideSuccess) {
         index = 1;
       } else if (state is AppNavigationLoadProfileSuccess) {
         index = 2;
@@ -40,7 +40,7 @@ class AppNavigationBar extends StatelessWidget {
             if (index == 0) {
               context.read<AppNavigationCubit>().viewDashboard();
             } else if (index == 1) {
-              context.read<AppNavigationCubit>().startRide();
+              context.read<AppNavigationCubit>().newRideActivity();
             } else if (index == 2) {
               context.read<AppNavigationCubit>().viewProfile();
             }

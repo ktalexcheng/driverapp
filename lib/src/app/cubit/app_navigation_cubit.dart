@@ -10,8 +10,8 @@ class AppNavigationCubit extends Cubit<AppNavigationState> {
     emit(AppNavigationLoadDashboardSuccess());
   }
 
-  void startRide() {
-    emit(AppNavigationStartRideSuccess());
+  void newRideActivity() {
+    emit(AppNavigationLoadRideSuccess());
   }
 
   void viewProfile() {

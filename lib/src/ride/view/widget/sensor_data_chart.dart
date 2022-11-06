@@ -69,12 +69,14 @@ class AccelerometerXLiveChart extends StatelessWidget
   Widget build(BuildContext context) {
     return BlocListener<RideActivityCubit, RideActivityState>(
       listener: (context, state) {
-        ChartDatum newData = ChartDatum(
-          timestamp: state.newSensorData.timestamp,
-          value: state.newSensorData.accelerometerX ?? 0,
-        );
+        if (state is RideActivityNewRideInProgress) {
+          ChartDatum newData = ChartDatum(
+            timestamp: state.newSensorData.timestamp,
+            value: state.newSensorData.accelerometerX ?? 0,
+          );
 
-        _refreshChartData(newData);
+          _refreshChartData(newData);
+        }
       },
       child: _buildChart(),
     );

@@ -1,5 +1,8 @@
 import 'dart:async';
 
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import 'package:trailbrake/src/ride/data/model/model.dart';
 import 'package:trailbrake/src/ride/data/provider/provider.dart';
 
@@ -67,9 +70,20 @@ class ActiveRideRepository {
   StreamSubscription? gyroSubscription;
   StreamSubscription? locationSubscription;
 
-  double? lastLocationLat;
-  double? lastLocationLong;
-  Duration elapsedSeconds = const Duration();
+  // double lastLocationLat = 0;
+  // double lastLocationLong = 0;
+  // Duration elapsedSeconds = const Duration();
+  bool locationUpdated = false;
+  LatLng initialLatLng = const LatLng(0, 0);
+
+  Future<void> initRide() async {
+    // Sensors must be fully initialized before proceeding
+    await sensorController.initSensors();
+
+    // Get current location
+    Position nowLocation = await sensorController.getCurrentLocation();
+    initialLatLng = LatLng(nowLocation.latitude, nowLocation.longitude);
+  }
 
   void addDataToRide() {
     if (_dataBuffer.ifBufferFull()) {
@@ -83,11 +97,21 @@ class ActiveRideRepository {
         gyroscopeZ: _dataBuffer.gyroscopeZ,
         locationLat: _dataBuffer.locationLat,
         locationLong: _dataBuffer.locationLong,
+        locationUpdated: locationUpdated,
       );
-      elapsedSeconds = DateTime.now().difference(sensorData.timestamp);
-      rideDataStreamController.add(sensorData);
+
       rideData.addData(sensorData);
+      sensorData.elapsedSeconds = rideData.elapsedSeconds;
+
+      // if (rideData.observations > 0) {
+      //   elapsedSeconds =
+      //       sensorData.timestamp.difference(rideData.first.timestamp);
+      // }
+
+      rideDataStreamController.add(sensorData);
+
       _dataBuffer = _SensorDataBuffer();
+      locationUpdated = false;
     }
   }
 
@@ -95,9 +119,6 @@ class ActiveRideRepository {
     // A StreamController can only be listened once in a lifecycle (even after the subscription is cancelled)
     // This ensures rideDataStreamController is never listened to initially
     rideDataStreamController = StreamController<SensorData>();
-
-    // Sensors must be fully initialized before proceeding
-    await sensorController.initSensors();
 
     accelSubscription = sensorController.accelStream?.listen(
       (event) {
@@ -113,9 +134,10 @@ class ActiveRideRepository {
       },
     );
 
-    // Location data only updates on position change
+    // Location data only updates on location change
     locationSubscription = sensorController.locationStream?.listen(
       (event) {
+        locationUpdated = true;
         _addLocDataToBuffer(event);
         addDataToRide();
       },

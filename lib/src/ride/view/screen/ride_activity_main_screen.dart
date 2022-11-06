@@ -35,38 +35,35 @@ class RideActivityMainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // TODO: Replace background with Google map
-        Container(
-          color: Colors.white70.withOpacity(0.1),
-          child: const Center(child: Text("<Map placeholder>")),
-        ),
-        SizedBox.expand(
-          child: BlocProvider(
-            create: (context) => RideActivityCubit(),
+    return BlocProvider(
+      create: (context) => RideActivityCubit(),
+      child: Stack(
+        children: [
+          MapBackground(),
+          SizedBox.expand(
             child: BlocConsumer<RideActivityCubit, RideActivityState>(
               listener: (context, state) {
-                if (state.status == RideActivityStatus.saved) {
+                if (state is RideActivitySaveSuccess) {
                   _showSaveSuccessfulNotification(context);
                   Navigator.of(context)
                       .pushNamed('/ride/rideScore', arguments: context);
                 }
               },
               buildWhen: (previous, current) {
-                if (previous.status != current.status) {
+                if (previous != current) {
                   return true;
                 } else {
                   return false;
                 }
               },
               builder: (context, state) {
-                if (state.status == RideActivityStatus.ready) {
+                if (state is RideActivityInitial ||
+                    state is RideActivityPrepareSuccess) {
                   return const RideActivityReadyScreen();
-                } else if (state.status == RideActivityStatus.running ||
-                    state.status == RideActivityStatus.paused) {
+                } else if (state is RideActivityNewRideInProgress ||
+                    state is RideActivityPaused) {
                   return const RideActivityOngoingScreen();
-                } else if (state.status == RideActivityStatus.saving) {
+                } else if (state is RideActivitySaveInProgress) {
                   return SizedBox(
                     width: double.infinity,
                     child: Column(
@@ -79,7 +76,7 @@ class RideActivityMainScreen extends StatelessWidget {
                       ],
                     ),
                   );
-                } else if (state.status == RideActivityStatus.saved) {
+                } else if (state is RideActivitySaveSuccess) {
                   return Container();
                 } else {
                   return const Text(constants.invalidStateMessage);
@@ -87,8 +84,8 @@ class RideActivityMainScreen extends StatelessWidget {
               },
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

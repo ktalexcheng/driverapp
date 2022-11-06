@@ -22,19 +22,26 @@ class ActiveRideMetrics extends StatelessWidget {
           Text(metricName),
           BlocBuilder<RideActivityCubit, RideActivityState>(
             builder: (context, state) {
-              dynamic metricValue;
+              if (state is RideActivityNewRideInProgress) {
+                dynamic metricValue;
 
-              switch (metric) {
-                case constants.RideActivityMetrics.accelerometerX:
-                  metricValue =
-                      state.newSensorData.accelerometerX?.toStringAsFixed(3);
-                  break;
-                default:
-                  metricValue =
-                      DateFormat.Hms().format(state.newSensorData.timestamp);
-              }
+                switch (metric) {
+                  case constants.RideActivityMetrics.accelerometerX:
+                    metricValue =
+                        state.newSensorData.accelerometerX?.toStringAsFixed(3);
+                    break;
 
-              if (state.status == RideActivityStatus.running) {
+                  case constants.RideActivityMetrics.timeElapsed:
+                    metricValue = formatDuration(
+                        state.newSensorData.elapsedSeconds ?? const Duration());
+                    break;
+
+                  default:
+                    metricValue =
+                        DateFormat.Hms().format(state.newSensorData.timestamp);
+                    break;
+                }
+
                 return Text(metricValue);
               } else {
                 return Container();
