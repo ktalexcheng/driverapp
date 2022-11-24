@@ -11,7 +11,10 @@ class ScreenTitle extends StatelessWidget {
       alignment: Alignment.topLeft,
       child: Text(
         title,
-        style: Theme.of(context).textTheme.displayMedium,
+        style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+              fontWeight: FontWeight.w400,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
       ),
     );
   }

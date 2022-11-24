@@ -22,7 +22,7 @@ class RideDetailsMetric extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8),
-      color: Colors.grey.withOpacity(0.2),
+      color: Theme.of(context).colorScheme.primaryContainer,
       child: Column(
         children: [
           Text(title),
@@ -145,7 +145,10 @@ class RideDetailsScreen extends StatelessWidget {
                     children: [
                       Text(
                         state.savedRide.rideName,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
+                        style: Theme.of(context)
+                            .textTheme
+                            .labelLarge!
+                            .copyWith(fontWeight: FontWeight.bold),
                       ),
                       Text(DateFormat.yMMMd()
                           .add_jms()

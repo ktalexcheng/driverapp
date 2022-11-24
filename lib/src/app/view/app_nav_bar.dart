@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trailbrake/src/app/cubit/cubit.dart';
+import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class AppNavigationBar extends StatelessWidget {
   const AppNavigationBar({super.key, required this.initialIndex});
@@ -32,8 +33,9 @@ class AppNavigationBar extends StatelessWidget {
         return BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           backgroundColor: colorScheme.surface,
-          selectedItemColor: colorScheme.onSurface,
-          unselectedItemColor: colorScheme.onBackground.withOpacity(.60),
+          selectedItemColor: colorScheme.primary,
+          unselectedItemColor:
+              colorScheme.onSurface.withOpacity(constants.inactiveOpacity),
           selectedLabelStyle: textTheme.caption,
           unselectedLabelStyle: textTheme.caption,
           onTap: (index) {

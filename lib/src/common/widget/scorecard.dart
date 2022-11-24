@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:trailbrake/src/common/constants.dart' as constants;
+
 class Scorecard extends StatelessWidget {
   const Scorecard({super.key, required this.title, required this.score});
 
@@ -18,8 +20,8 @@ class Scorecard extends StatelessWidget {
           textBaseline: TextBaseline.alphabetic,
           children: [
             Text(score.toStringAsFixed(1),
-                style: const TextStyle(fontSize: 50)),
-            const Text("/100"),
+                style: Theme.of(context).textTheme.displayLarge),
+            const Text(constants.rideScoreDenominator),
           ],
         ),
       ],

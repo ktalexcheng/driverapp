@@ -22,6 +22,8 @@ class RideActivityGoToDashboardButton extends StatelessWidget {
       child: const Text("Go to dashboard"),
       style: ElevatedButton.styleFrom(
         minimumSize: const Size.fromHeight(40),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.onPrimary,
       ),
     );
   }
@@ -41,10 +43,17 @@ class RideActivityScoreScreen extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      const ScreenTitle(title: "Ride completed!"),
-                      Scorecard(
-                          title: "Ride score", score: state.rideScore.overall),
-                      const SectionTitle(title: "Score breakdown"),
+                      const ScreenTitle(
+                          title: constants.rideSummaryScreenTitle),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 48),
+                        child: Scorecard(
+                          title: constants.rideScoreSectionTitle,
+                          score: state.rideScore.overall,
+                        ),
+                      ),
+                      const SectionTitle(
+                          title: constants.rideScoreProfileSectionTitle),
                       ScoreProfile(scores: state.rideScore),
                     ],
                   ),
@@ -67,6 +76,8 @@ class RideActivityScoreScreen extends StatelessWidget {
               ),
             ),
           );
+        } else if (state is RideActivityPrepareSuccess) {
+          return Container();
         } else {
           return const Text(constants.invalidStateMessage);
         }

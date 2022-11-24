@@ -14,41 +14,52 @@ class ActiveRideMetrics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String metricName = metric.toString().split('.').last;
+    String metricName = constants.RideActivityMetricsName[metric];
+    dynamic metricValue;
 
     return Card(
-      child: Column(
-        children: [
-          Text(metricName),
-          BlocBuilder<RideActivityCubit, RideActivityState>(
-            builder: (context, state) {
-              if (state is RideActivityNewRideInProgress) {
-                dynamic metricValue;
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+        child: Column(
+          children: [
+            Text(
+              metricName,
+              style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            BlocBuilder<RideActivityCubit, RideActivityState>(
+              builder: (context, state) {
+                if (state is RideActivityNewRideInProgress) {
+                  switch (metric) {
+                    case constants.RideActivityMetrics.accelerometerX:
+                      metricValue = state.newSensorData.accelerometerX
+                          ?.toStringAsFixed(3);
+                      break;
 
-                switch (metric) {
-                  case constants.RideActivityMetrics.accelerometerX:
-                    metricValue =
-                        state.newSensorData.accelerometerX?.toStringAsFixed(3);
-                    break;
+                    case constants.RideActivityMetrics.timeElapsed:
+                      metricValue = formatDuration(
+                          state.newSensorData.elapsedSeconds ??
+                              const Duration());
+                      break;
 
-                  case constants.RideActivityMetrics.timeElapsed:
-                    metricValue = formatDuration(
-                        state.newSensorData.elapsedSeconds ?? const Duration());
-                    break;
+                    default:
+                      metricValue = DateFormat.Hms()
+                          .format(state.newSensorData.timestamp);
+                      break;
+                  }
 
-                  default:
-                    metricValue =
-                        DateFormat.Hms().format(state.newSensorData.timestamp);
-                    break;
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Text(metricValue),
+                  );
+                } else {
+                  return Container();
                 }
-
-                return Text(metricValue);
-              } else {
-                return Container();
-              }
-            },
-          ),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -59,7 +70,7 @@ class RideActivityExitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
+    return ElevatedButton(
       onPressed: () {
         context.read<RideActivityCubit>().stopRide();
         showDialog(
@@ -80,7 +91,7 @@ class RideActivityExitButton extends StatelessWidget {
           }
         });
       },
-      child: const Text("Exit"),
+      child: const Text(constants.exitRideButtonLabel),
       style: ElevatedButton.styleFrom(
         minimumSize: const Size.fromHeight(40),
       ),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trailbrake/src/ride/cubit/cubit.dart';
 import 'package:trailbrake/src/common/common.dart';
+import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class RideActivityStartButton extends StatelessWidget {
   const RideActivityStartButton({super.key});
@@ -35,7 +36,10 @@ class RideActivityLocationStatusBar extends StatelessWidget {
             right: 0,
             child: Container(
               alignment: Alignment.center,
-              color: Colors.grey,
+              color: Theme.of(context)
+                  .colorScheme
+                  .tertiaryContainer
+                  .withOpacity(constants.overlayOpacity),
               height: 40,
               child: const Text("Acquiring GPS..."),
             ),

@@ -52,7 +52,10 @@ class RidePreviewCard extends StatelessWidget {
                       children: [
                         Text(
                           rideRecord.rideName,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge!
+                              .copyWith(fontWeight: FontWeight.bold),
                         ),
                         Expanded(
                           child: Align(
@@ -81,7 +84,10 @@ class RidePreviewCard extends StatelessWidget {
                   alignment: Alignment.bottomRight,
                   child: Text(
                     rideRecord.rideScore.overall.toString(),
-                    style: Theme.of(context).textTheme.displayMedium,
+                    style: Theme.of(context)
+                        .textTheme
+                        .displayLarge!
+                        .copyWith(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
               ],

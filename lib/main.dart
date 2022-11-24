@@ -2,7 +2,7 @@ import 'package:wakelock/wakelock.dart'; // FOR DEVELOPMENT ONLY
 import 'package:flutter/material.dart';
 
 import 'package:trailbrake/src/app/app.dart';
-import 'package:trailbrake/theme/theme.dart';
+import 'package:trailbrake/theme/app_theme.dart' as app_theme;
 
 void main() {
   runApp(TrailBrakeApp());
@@ -19,8 +19,8 @@ class TrailBrakeApp extends StatelessWidget {
 
     return MaterialApp(
       title: 'Rate My Ride',
-      theme: ThemeData(useMaterial3: true, colorScheme: lightColorScheme),
-      darkTheme: ThemeData(useMaterial3: true, colorScheme: darkColorScheme),
+      theme: app_theme.lightTheme,
+      darkTheme: app_theme.darkTheme,
       themeMode: ThemeMode.dark,
       home: const AppMainScreen(),
       onGenerateRoute: _appRouter.onGenerateRoute,

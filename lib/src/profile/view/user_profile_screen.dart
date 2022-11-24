@@ -23,14 +23,21 @@ class UserProfileScreen extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const CircleAvatar(backgroundColor: Colors.white),
+                    CircleAvatar(
+                        backgroundColor:
+                            Theme.of(context).colorScheme.primaryContainer),
                     constants.columnSpacer,
                     Text(state.user.username),
                   ],
                 ),
-                Scorecard(
-                    title: "Driver score", score: state.user.scores.overall),
-                const SectionTitle(title: "Score breakdown"),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 48),
+                  child: Scorecard(
+                      title: constants.userScoreSectionTitle,
+                      score: state.user.scores.overall),
+                ),
+                const SectionTitle(
+                    title: constants.userScoreProfileSectionTitle),
                 ScoreProfile(scores: state.user.scores),
               ],
             ),

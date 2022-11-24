@@ -14,7 +14,8 @@ class MapBackground extends StatelessWidget with MapBackgroundMixin {
   // late final GoogleMapController? googleMapController;
   static const LatLng initialLocation = LatLng(0, 0);
   static const double mapZoomLevel = 17;
-  final mapMarkers = <Marker>{};
+  final Set<Marker> mapMarkers = <Marker>{};
+  final List<LatLng> mapLatLngs = <LatLng>[];
 
   void _updateMapLocation(LatLng newLocation) {
     googleMapController?.animateCamera(
@@ -26,17 +27,28 @@ class MapBackground extends StatelessWidget with MapBackgroundMixin {
       ),
     );
 
-    mapMarkers.add(
-      Marker(
-        markerId: const MarkerId('nowLocation'),
-        position: newLocation,
+    // mapMarkers.add(Marker(
+    //   markerId: const MarkerId('nowLocation'),
+    //   position: newLocation,
+    // ));
+
+    mapLatLngs.add(newLocation);
+  }
+
+  void _lastLocation() {
+    googleMapController?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          zoom: mapZoomLevel,
+          target: mapLatLngs.last,
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<RideActivityCubit, RideActivityState>(
+    return BlocConsumer<RideActivityCubit, RideActivityState>(
       listener: (context, state) {
         if (state is RideActivityNewRideInProgress) {
           if (state.newSensorData.locationUpdated ?? false) {
@@ -51,14 +63,41 @@ class MapBackground extends StatelessWidget with MapBackgroundMixin {
           _updateMapLocation(state.initialLocation);
         }
       },
-      // child: Container(),
-      child: GoogleMap(
-        onMapCreated: (controller) => googleMapController = controller,
-        initialCameraPosition: const CameraPosition(
-          target: initialLocation,
-          zoom: mapZoomLevel,
-        ),
-      ),
+      builder: (context, state) {
+        // child: Container(),
+        return Stack(
+          children: [
+            GoogleMap(
+              myLocationEnabled: true,
+              myLocationButtonEnabled: false,
+              zoomControlsEnabled: false,
+              onMapCreated: (controller) => googleMapController = controller,
+              initialCameraPosition: const CameraPosition(
+                target: initialLocation,
+                zoom: mapZoomLevel,
+              ),
+              markers: mapMarkers,
+              polylines: {
+                Polyline(
+                  polylineId: const PolylineId('nowRoute'),
+                  points: mapLatLngs,
+                  color: Theme.of(context).colorScheme.primary,
+                  width: 5,
+                )
+              },
+            ),
+            Positioned(
+              bottom: 72,
+              right: 16,
+              child: FloatingActionButton(
+                shape: const CircleBorder(),
+                onPressed: () => _lastLocation(),
+                child: const Icon(Icons.my_location),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

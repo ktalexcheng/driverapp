@@ -15,7 +15,7 @@ class RideActivityMainScreen extends StatelessWidget {
       // Overlay is not part of the app screen scaffold
       // so a DefaultTextStyle needs to be provided for proper styling
       return DefaultTextStyle(
-        style: Theme.of(context).textTheme.bodyText1!,
+        style: Theme.of(context).textTheme.bodySmall!,
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,

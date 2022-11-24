@@ -11,84 +11,77 @@ class DashboardMainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => DashboardBloc()..add(DashboardCatalogRequested()),
-      child: BlocBuilder<DashboardBloc, DashboardState>(
-        builder: (context, state) {
-          if (state is DashboardGetCatalogSuccess) {
-            return AppCanvas(
-              child: Column(
-                children: [
-                  const ScreenTitle(title: constants.dashboardScreenTitle),
-                  const SectionTitle(
-                      title: constants.lifetimeMetricsSectionTitle),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: const [
-                        LifetimeMetricCard(type: 'totalDistance'),
-                        LifetimeMetricCard(type: 'totalDuration'),
-                        LifetimeMetricCard(type: 'maxAcceleration'),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: SizedBox.expand(
-                      child: DefaultTabController(
-                        length: 2,
-                        initialIndex: 1,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: const [
-                                TabBar(
-                                  isScrollable: true,
-                                  labelPadding:
-                                      EdgeInsets.symmetric(horizontal: 8),
-                                  tabs: [
-                                    Tab(height: 30, text: "Best Rides"),
-                                    Tab(height: 30, text: "All Rides"),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Expanded(
-                              child: TabBarView(
-                                children: [
-                                  const Text("NOT YET IMPLEMENTED"),
-                                  RefreshIndicator(
-                                    onRefresh: () async => context
-                                        .read<DashboardBloc>()
-                                        .add(DashboardCatalogRequested()),
-                                    child: ListView.builder(
-                                      physics:
-                                          const AlwaysScrollableScrollPhysics(), // To enable RefreshIndicator
-                                      scrollDirection: Axis.vertical,
-                                      itemCount: state.rideCatalog.length,
-                                      itemBuilder: (context, index) {
-                                        return RidePreviewCard(
-                                          rideRecord: state.rideCatalog[index],
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
+    return AppCanvas(
+      child: BlocProvider(
+        create: (_) => DashboardBloc()..add(DashboardCatalogRequested()),
+        child: BlocBuilder<DashboardBloc, DashboardState>(
+          builder: (context, state) {
+            if (state is DashboardGetCatalogSuccess) {
+              return CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    expandedHeight: 100,
+                    collapsedHeight: 75,
+                    pinned: true,
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    flexibleSpace: Container(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      child: FlexibleSpaceBar(
+                        titlePadding: const EdgeInsetsDirectional.only(
+                            start: 0, bottom: 24),
+                        title: Text(
+                          constants.dashboardScreenTitle,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .copyWith(
+                                fontWeight: FontWeight.w400,
+                                color:
+                                    Theme.of(context).colorScheme.onBackground,
                               ),
-                            ),
-                          ],
                         ),
                       ),
                     ),
                   ),
+                  const SliverToBoxAdapter(
+                    child: SectionTitle(
+                        title: constants.lifetimeMetricsSectionTitle),
+                  ),
+                  SliverToBoxAdapter(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: const [
+                          LifetimeMetricCard(type: 'totalDistance'),
+                          LifetimeMetricCard(type: 'totalDuration'),
+                          LifetimeMetricCard(type: 'maxAcceleration'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 16),
+                      child: SectionTitle(
+                          title: constants.rideCatalogSectionTitle),
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      return RidePreviewCard(
+                        rideRecord: state.rideCatalog[index],
+                      );
+                    }, childCount: state.rideCatalog.length),
+                  )
                 ],
-              ),
-            );
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
       ),
     );
   }

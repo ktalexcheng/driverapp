@@ -11,7 +11,7 @@ class ComponentTitle extends StatelessWidget {
       alignment: Alignment.topLeft,
       child: Text(
         title,
-        style: Theme.of(context).textTheme.caption,
+        style: Theme.of(context).textTheme.titleSmall,
       ),
     );
   }
