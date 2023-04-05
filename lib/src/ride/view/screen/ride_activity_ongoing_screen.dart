@@ -14,8 +14,9 @@ class ActiveRideMetrics extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String metricName = constants.RideActivityMetricsName[metric];
-    dynamic metricValue;
+    String metricName = constants.rideActivityMetricsName[metric];
+    String metricValue;
+    String? metricUnit;
 
     return Card(
       child: Padding(
@@ -34,13 +35,31 @@ class ActiveRideMetrics extends StatelessWidget {
                   switch (metric) {
                     case constants.RideActivityMetrics.accelerometerX:
                       metricValue = state.newSensorData.accelerometerX
-                          ?.toStringAsFixed(3);
+                              ?.toStringAsFixed(3) ??
+                          "0";
+                      metricUnit = 'm/s2';
                       break;
 
                     case constants.RideActivityMetrics.timeElapsed:
                       metricValue = formatDuration(
                           state.newSensorData.elapsedSeconds ??
                               const Duration());
+                      break;
+
+                    case constants.RideActivityMetrics.avgSpeed:
+                      metricValue = state.rideData.avgSpeed.toStringAsFixed(1);
+                      metricUnit = 'km/hr';
+                      break;
+
+                    case constants.RideActivityMetrics.avgMovingSpeed:
+                      metricValue =
+                          state.rideData.avgMovingSpeed.toStringAsFixed(1);
+                      metricUnit = 'km/hr';
+                      break;
+
+                    case constants.RideActivityMetrics.distance:
+                      metricValue = state.rideData.distance.toStringAsFixed(2);
+                      metricUnit = 'km';
                       break;
 
                     default:
@@ -51,7 +70,7 @@ class ActiveRideMetrics extends StatelessWidget {
 
                   return Padding(
                     padding: const EdgeInsets.only(top: 8),
-                    child: Text(metricValue),
+                    child: Text('$metricValue ${metricUnit ?? ''}'),
                   );
                 } else {
                   return Container();
@@ -124,7 +143,7 @@ class RideActivityOngoingScreen extends StatelessWidget {
                     constants.columnSpacer,
                     Expanded(
                       child: ActiveRideMetrics(
-                        metric: constants.RideActivityMetrics.accelerometerX,
+                        metric: constants.RideActivityMetrics.distance,
                       ),
                     ),
                   ],

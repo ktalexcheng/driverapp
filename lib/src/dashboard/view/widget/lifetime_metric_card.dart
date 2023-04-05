@@ -21,7 +21,7 @@ class LifetimeMetricCard extends StatelessWidget {
         title = 'Distance Driven';
         break;
 
-      case 'totalDuration':
+      case 'totalRideTime':
         title = 'Time Driven';
         break;
 
@@ -44,7 +44,7 @@ class LifetimeMetricCard extends StatelessWidget {
               display = '${(value / 1000).toStringAsFixed(3)} km';
               break;
 
-            case 'totalDuration':
+            case 'totalRideTime':
               display = formatDuration(value);
               break;
 

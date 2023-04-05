@@ -8,3 +8,5 @@ abstract class DashboardEvent {}
 class DashboardStarted extends DashboardEvent {}
 
 class DashboardCatalogRequested extends DashboardEvent {}
+
+class DashboardUserLogout extends DashboardEvent {}

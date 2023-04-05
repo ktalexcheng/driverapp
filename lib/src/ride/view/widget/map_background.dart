@@ -46,6 +46,11 @@ class MapBackground extends StatelessWidget with MapBackgroundMixin {
     );
   }
 
+  void _clearMap() {
+    mapMarkers.clear();
+    mapLatLngs.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<RideActivityCubit, RideActivityState>(
@@ -60,6 +65,7 @@ class MapBackground extends StatelessWidget with MapBackgroundMixin {
             _updateMapLocation(_newLocation);
           }
         } else if (state is RideActivityPrepareSuccess) {
+          _clearMap();
           _updateMapLocation(state.initialLocation);
         }
       },

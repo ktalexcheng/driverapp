@@ -24,24 +24,24 @@ abstract class User {
 
 class UserLifetimeStats {
   UserLifetimeStats({
-    required this.totalDuration,
+    required this.totalRideTime,
     required this.totalDistance,
     required this.maxAcceleration,
   });
 
   UserLifetimeStats.fromJson(Map<String, dynamic> json)
-      : totalDuration = Duration(seconds: json['totalDuration'].round()),
+      : totalRideTime = Duration(seconds: json['totalRideTime'].round()),
         totalDistance = json['totalDistance'] + 0.0,
         maxAcceleration = json['maxAcceleration'] + 0.0;
 
-  final Duration totalDuration;
+  final Duration totalRideTime;
   final double totalDistance;
   final double maxAcceleration;
 
   dynamic getMetric(String metricName) {
     switch (metricName) {
-      case 'totalDuration':
-        return totalDuration;
+      case 'totalRideTime':
+        return totalRideTime;
 
       case 'totalDistance':
         return totalDistance;

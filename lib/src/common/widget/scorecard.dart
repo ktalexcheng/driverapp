@@ -19,8 +19,13 @@ class Scorecard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.baseline,
           textBaseline: TextBaseline.alphabetic,
           children: [
-            Text(score.toStringAsFixed(1),
-                style: Theme.of(context).textTheme.displayLarge),
+            Text(
+              score.toStringAsFixed(1),
+              style: Theme.of(context)
+                  .textTheme
+                  .displayLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.primary),
+            ),
             const Text(constants.rideScoreDenominator),
           ],
         ),

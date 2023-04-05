@@ -10,6 +10,16 @@ class UserProfileInitial extends UserProfileState {
   // dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
+// class UserProfileLoginInProgress extends UserProfileState {}
+
+// class UserProfileLoginAuthInProgress extends UserProfileState {}
+
+// class UserProfileLoginAuthSuccess extends UserProfileState {}
+
+// class UserProfileLoginAuthFailure extends UserProfileState {}
+
+class UserProfileUnauthenticated extends UserProfileState {}
+
 class UserProfileGetInProgress extends UserProfileState {
   // @override
   // dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);

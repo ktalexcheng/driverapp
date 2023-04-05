@@ -35,57 +35,54 @@ class RideActivityMainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => RideActivityCubit(),
-      child: Stack(
-        children: [
-          MapBackground(),
-          SizedBox.expand(
-            child: BlocConsumer<RideActivityCubit, RideActivityState>(
-              listener: (context, state) {
-                if (state is RideActivitySaveSuccess) {
-                  _showSaveSuccessfulNotification(context);
-                  Navigator.of(context)
-                      .pushNamed('/ride/rideScore', arguments: context);
-                }
-              },
-              buildWhen: (previous, current) {
-                if (previous != current) {
-                  return true;
-                } else {
-                  return false;
-                }
-              },
-              builder: (context, state) {
-                if (state is RideActivityInitial ||
-                    state is RideActivityPrepareSuccess) {
-                  return const RideActivityReadyScreen();
-                } else if (state is RideActivityNewRideInProgress ||
-                    state is RideActivityPaused) {
-                  return const RideActivityOngoingScreen();
-                } else if (state is RideActivitySaveInProgress) {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: const [
-                        CircularProgressIndicator(),
-                        SizedBox(height: constants.widgetSpacing),
-                        Text(constants.savingInProgressMessage),
-                      ],
-                    ),
-                  );
-                } else if (state is RideActivitySaveSuccess) {
-                  return Container();
-                } else {
-                  return const Text(constants.invalidStateMessage);
-                }
-              },
-            ),
+    return Stack(
+      children: [
+        MapBackground(),
+        SizedBox.expand(
+          child: BlocConsumer<RideActivityCubit, RideActivityState>(
+            listener: (context, state) {
+              if (state is RideActivitySaveSuccess) {
+                _showSaveSuccessfulNotification(context);
+                Navigator.of(context)
+                    .pushNamed('/ride/rideScore', arguments: context);
+              }
+            },
+            buildWhen: (previous, current) {
+              if (previous != current) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+            builder: (context, state) {
+              if (state is RideActivityInitial ||
+                  state is RideActivityPrepareSuccess) {
+                return const RideActivityReadyScreen();
+              } else if (state is RideActivityNewRideInProgress ||
+                  state is RideActivityPaused) {
+                return const RideActivityOngoingScreen();
+              } else if (state is RideActivitySaveInProgress) {
+                return SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      CircularProgressIndicator(),
+                      SizedBox(height: constants.widgetSpacing),
+                      Text(constants.savingInProgressMessage),
+                    ],
+                  ),
+                );
+              } else if (state is RideActivitySaveSuccess) {
+                return Container();
+              } else {
+                return const Text(constants.invalidStateMessage);
+              }
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

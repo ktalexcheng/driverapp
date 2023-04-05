@@ -70,8 +70,8 @@ class ActiveRideRepository {
   StreamSubscription? gyroSubscription;
   StreamSubscription? locationSubscription;
 
-  // double lastLocationLat = 0;
-  // double lastLocationLong = 0;
+  double lastLocationLat = 0;
+  double lastLocationLong = 0;
   // Duration elapsedSeconds = const Duration();
   bool locationUpdated = false;
   LatLng initialLatLng = const LatLng(0, 0);
@@ -95,8 +95,8 @@ class ActiveRideRepository {
         gyroscopeX: _dataBuffer.gyroscopeX,
         gyroscopeY: _dataBuffer.gyroscopeY,
         gyroscopeZ: _dataBuffer.gyroscopeZ,
-        locationLat: _dataBuffer.locationLat,
-        locationLong: _dataBuffer.locationLong,
+        locationLat: lastLocationLat,
+        locationLong: lastLocationLong,
         locationUpdated: locationUpdated,
       );
 
@@ -177,6 +177,8 @@ class ActiveRideRepository {
   }
 
   void _addLocDataToBuffer(sensorEvent) {
+    lastLocationLat = sensorEvent.latitude;
+    lastLocationLong = sensorEvent.longitude;
     _dataBuffer.locationData = sensorEvent;
   }
 }

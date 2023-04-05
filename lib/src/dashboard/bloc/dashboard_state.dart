@@ -12,6 +12,8 @@ class DashboardInitial extends DashboardState {
   // dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
+class DashboardUnauthenticated extends DashboardState {}
+
 class DashboardGetCatalogInProgress extends DashboardState {
   // @override
   // dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);

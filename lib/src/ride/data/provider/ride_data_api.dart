@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
-
 import 'package:trailbrake/src/ride/data/data.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
+import 'package:trailbrake/src/common/common.dart';
 
 class RideDataAPIResponse {
   RideDataAPIResponse(this.httpCode, this.responseBody);
@@ -13,11 +12,11 @@ class RideDataAPIResponse {
 }
 
 class RideDataAPI {
-  final String apiDomain = constants.trailbrakeApiUrl;
-  http.Client client = http.Client();
+  final String baseUrl = constants.trailbrakeApiUrl;
+  AuthorizedHttpClient client = AuthorizedHttpClient();
 
   Future<RideDataAPIResponse> getRideCatalog() async {
-    final response = await client.get(Uri.parse('$apiDomain/rides'));
+    final response = await client.get(Uri.parse('$baseUrl/rides'));
 
     final List<RideRecord> allRideHistory = <RideRecord>[];
 
@@ -35,7 +34,7 @@ class RideDataAPI {
   }
 
   Future<RideDataAPIResponse> getRideData(String id) async {
-    final response = await client.get(Uri.parse('$apiDomain/rides/$id'));
+    final response = await client.get(Uri.parse('$baseUrl/rides/$id'));
 
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
@@ -48,7 +47,7 @@ class RideDataAPI {
 
   Future<RideDataAPIResponse> saveRideData(NewRide postBody) async {
     final response = await client.post(
-      Uri.parse('$apiDomain/rides'),
+      Uri.parse('$baseUrl/rides'),
       headers: <String, String>{'Content-Type': 'application/json'},
       body: jsonEncode(postBody),
     );
@@ -64,7 +63,7 @@ class RideDataAPI {
   }
 
   Future<RideDataAPIResponse> deleteRideData(String id) async {
-    final response = await client.delete(Uri.parse('$apiDomain/rides/$id'));
+    final response = await client.delete(Uri.parse('$baseUrl/rides/$id'));
 
     if (response.statusCode == 200) {
       return RideDataAPIResponse(200, true);

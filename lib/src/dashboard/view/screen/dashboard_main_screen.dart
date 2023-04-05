@@ -12,9 +12,17 @@ class DashboardMainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppCanvas(
-      child: BlocProvider(
-        create: (_) => DashboardBloc()..add(DashboardCatalogRequested()),
-        child: BlocBuilder<DashboardBloc, DashboardState>(
+      child: BlocListener<UserAuthCubit, UserAuthState>(
+        listener: (context, state) {
+          if (state is UserAuthLoginSuccess) {
+            context.read<DashboardBloc>().add(DashboardCatalogRequested());
+          }
+        },
+        child:
+            // BlocProvider(
+            //   create: (_) => DashboardBloc()..add(DashboardCatalogRequested()),
+            //   child:
+            BlocBuilder<DashboardBloc, DashboardState>(
           builder: (context, state) {
             if (state is DashboardGetCatalogSuccess) {
               return CustomScrollView(
@@ -53,7 +61,7 @@ class DashboardMainScreen extends StatelessWidget {
                       child: Row(
                         children: const [
                           LifetimeMetricCard(type: 'totalDistance'),
-                          LifetimeMetricCard(type: 'totalDuration'),
+                          LifetimeMetricCard(type: 'totalRideTime'),
                           LifetimeMetricCard(type: 'maxAcceleration'),
                         ],
                       ),
@@ -75,6 +83,10 @@ class DashboardMainScreen extends StatelessWidget {
                   )
                 ],
               );
+            } else if (state is DashboardUnauthenticated) {
+              return const Center(
+                child: Text(constants.guestModeDashbaord),
+              );
             } else {
               return const Center(
                 child: CircularProgressIndicator(),
@@ -82,6 +94,7 @@ class DashboardMainScreen extends StatelessWidget {
             }
           },
         ),
+        // ),
       ),
     );
   }

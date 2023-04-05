@@ -12,9 +12,11 @@ class RideActivityPrepareSuccess extends RideActivityState {
 }
 
 class RideActivityNewRideInProgress extends RideActivityState {
-  RideActivityNewRideInProgress({required this.newSensorData});
+  RideActivityNewRideInProgress(
+      {required this.newSensorData, required this.rideData});
 
   final SensorData newSensorData;
+  final RideData rideData;
 }
 
 class RideActivityPaused extends RideActivityState {}

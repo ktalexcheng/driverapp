@@ -1,4 +1,6 @@
-import 'package:trailbrake/src/ride/data/model/model.dart';
+import 'package:trailbrake/src/ride/data/model/ride_data.dart';
+import 'package:trailbrake/src/ride/data/model/ride_record.dart';
+import 'package:trailbrake/src/ride/data/model/sensor_data.dart';
 import 'package:trailbrake/src/common/common.dart';
 
 abstract class Ride with RideRecordMixin, RideDataMixin {}

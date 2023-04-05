@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
-
 import 'package:trailbrake/src/profile/data/model/model.dart';
 import 'package:trailbrake/src/common/common.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
@@ -15,7 +13,7 @@ class ProfileAPIResponse {
 
 class ProfileAPI {
   final String apiDomain = constants.trailbrakeApiUrl;
-  http.Client client = http.Client();
+  AuthorizedHttpClient client = AuthorizedHttpClient();
 
   Future<ProfileAPIResponse> getUserProfile() async {
     RideScore userScore;
@@ -30,7 +28,7 @@ class ProfileAPI {
     }
 
     final responseStat =
-        await client.get(Uri.parse('$apiDomain/profile/lifetime'));
+        await client.get(Uri.parse('$apiDomain/profile/stats'));
     if (responseStat.statusCode == 200) {
       userStats = UserLifetimeStats.fromJson(jsonDecode(responseStat.body));
     } else {

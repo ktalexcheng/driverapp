@@ -87,7 +87,10 @@ class RideActivityCubit extends Cubit<RideActivityState> {
     rideDataSubscription ??=
         rideDataRepository.rideDataStreamController.stream.listen(
       (event) {
-        emit(RideActivityNewRideInProgress(newSensorData: event));
+        emit(RideActivityNewRideInProgress(
+          newSensorData: event,
+          rideData: rideDataRepository.rideData,
+        ));
       },
     );
   }

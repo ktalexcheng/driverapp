@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:geolocator/geolocator.dart';
 
-import 'package:trailbrake/src/ride/data/model/model.dart';
+import 'package:trailbrake/src/ride/data/model/sensor_data.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class RideData with RideDataMixin {
@@ -121,33 +121,39 @@ mixin RideDataMixin {
     Duration duration = const Duration();
 
     if (data.isNotEmpty) {
-      double lastLat = data.first.locationLat ?? 0;
-      double lastLong = data.first.locationLong ?? 0;
+      double? lastLat = data.first.locationLat;
+      double? lastLong = data.first.locationLong;
       DateTime lastTimestamp = data.first.timestamp;
 
       data.asMap().forEach((idx, obs) {
         if (idx > 0) {
-          double newLat = data[idx].locationLat ?? 0;
-          double newLong = data[idx].locationLong ?? 0;
+          double? newLat = data[idx].locationLat;
+          double? newLong = data[idx].locationLong;
           DateTime newTimestamp = data[idx].timestamp;
 
-          if (newLat != 0 && newLong != 0 && lastLat != 0 && lastLong != 0) {
-            double _distanceMoved =
-                Geolocator.distanceBetween(lastLat, lastLong, newLat, newLong);
-            Duration _duration = newTimestamp.difference(lastTimestamp);
+          if (newLat != null && newLong != null) {
+            if (lastLat != null && lastLong != null) {
+              double _distanceMoved = Geolocator.distanceBetween(
+                  lastLat!, lastLong!, newLat, newLong);
+              Duration _duration = newTimestamp.difference(lastTimestamp);
 
-            if (_distanceMoved > 1) {
-              // Only consider data when movement occurs (> 1 meter)
-              distance += _distanceMoved;
-              duration += _duration;
+              if (_distanceMoved > 1) {
+                // Only consider data when movement occurs (> 1 meter)
+                distance += _distanceMoved;
+                duration += _duration;
 
-              lastLat = data[idx].locationLat ?? 0;
-              lastLong = data[idx].locationLong ?? 0;
-              lastTimestamp = data[idx].timestamp;
-            } else if (_duration.inSeconds > 3) {
-              // Under no movement, still update timestamp every 3 seconds
-              // as GPS data only updates when movement occurs
-              lastTimestamp = data[idx].timestamp;
+                lastLat = newLat;
+                lastLong = newLong;
+                lastTimestamp = newTimestamp;
+              } else if (_duration.inSeconds > 3) {
+                // Under no movement, still update timestamp every 3 seconds
+                // as GPS data only updates when movement occurs
+                lastTimestamp = data[idx].timestamp;
+              }
+            } else {
+              lastLat = newLat;
+              lastLong = newLong;
+              lastTimestamp = newTimestamp;
             }
           }
         }
@@ -159,7 +165,7 @@ mixin RideDataMixin {
     return movingSpeed;
   }
 
-  double calcAbsAcceleration(obs) {
+  double _calcAbsAcceleration(obs) {
     return sqrt(pow(obs.accelerometerX ?? 0, 2) +
         pow(obs.accelerometerY ?? 0, 2) +
         pow(obs.accelerometerZ ?? 0, 2));
@@ -171,7 +177,7 @@ mixin RideDataMixin {
 
     if (data.isNotEmpty) {
       data.asMap().forEach((idx, obs) {
-        absAcc.add(calcAbsAcceleration(obs));
+        absAcc.add(_calcAbsAcceleration(obs));
       });
 
       avgAbsAcc =
@@ -186,7 +192,7 @@ mixin RideDataMixin {
 
     if (data.isNotEmpty) {
       data.asMap().forEach((idx, obs) {
-        maxAbsAcc = max(maxAbsAcc, calcAbsAcceleration(obs));
+        maxAbsAcc = max(maxAbsAcc, _calcAbsAcceleration(obs));
       });
     }
 
@@ -199,7 +205,7 @@ mixin RideDataMixin {
 
     if (data.isNotEmpty) {
       data.asMap().forEach((idx, obs) {
-        absAcc.add(calcAbsAcceleration(obs));
+        absAcc.add(_calcAbsAcceleration(obs));
       });
 
       // Calculate standard deviation

@@ -1,3 +1,4 @@
 export 'util/util.dart';
 export 'widget/widget.dart';
-export 'model/model.dart';
+export 'data/data.dart';
+export 'cubit/cubit.dart';
