@@ -1,7 +1,7 @@
 import 'package:wakelock/wakelock.dart'; // FOR DEVELOPMENT ONLY
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/foundation.dart' as Foundation;
+import 'package:flutter/foundation.dart' as foundation;
 
 import 'package:trailbrake/src/app/app.dart';
 import 'package:trailbrake/theme/app_theme.dart' as app_theme;
@@ -18,10 +18,10 @@ class TrailbrakeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Foundation.kDebugMode) {
+    if (foundation.kDebugMode) {
       Wakelock.enable();
-      // AuthenticationRepository authRepository = AuthenticationRepository();
-      // authRepository.clearPreferences();
+      AuthenticationRepository authRepository = AuthenticationRepository();
+      authRepository.clearPreferences();
       Bloc.observer = DebugBlocObserver();
     }
 

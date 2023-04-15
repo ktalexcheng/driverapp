@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:trailbrake/src/ride/ride.dart';
 import 'package:trailbrake/src/dashboard/dashboard.dart';
 import 'package:trailbrake/src/profile/profile.dart';
+import 'package:trailbrake/src/common/common.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class RideActivityMainScreen extends StatelessWidget {
@@ -77,18 +78,20 @@ class RideActivityMainScreen extends StatelessWidget {
                   state is RideActivityPaused) {
                 return const RideActivityOngoingScreen();
               } else if (state is RideActivitySaveInProgress) {
-                return SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      CircularProgressIndicator(),
-                      SizedBox(height: constants.widgetSpacing),
-                      Text(constants.savingInProgressMessage),
-                    ],
-                  ),
-                );
+                // return SizedBox(
+                //   width: double.infinity,
+                //   child: Column(
+                //     mainAxisAlignment: MainAxisAlignment.center,
+                //     crossAxisAlignment: CrossAxisAlignment.center,
+                //     children: const [
+                //       CircularProgressIndicator(),
+                //       SizedBox(height: constants.widgetSpacing),
+                //       Text(constants.savingInProgressMessage),
+                //     ],
+                //   ),
+                // );
+                return const BusyIndicator(
+                    indicatorLabel: constants.savingInProgressMessage);
               } else if (state is RideActivitySaveSuccess) {
                 return Container();
               } else {

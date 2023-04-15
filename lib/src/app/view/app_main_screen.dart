@@ -37,7 +37,8 @@ class AppMainScreen extends StatelessWidget {
         body: BlocListener<UserAuthCubit, UserAuthState>(
           listener: (context, state) {
             if (state is UserAuthInitial) {
-            } else if (state is UserAuthLoginSuccess) {
+            } else if (state is UserAuthLoginSuccess ||
+                state is UserAuthCreateSuccess) {
               context.read<UserProfileCubit>().getUserProfileData();
               context.read<RideActivityCubit>().prepareRide();
               context.read<DashboardBloc>().add(DashboardCatalogRequested());

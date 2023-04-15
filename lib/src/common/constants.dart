@@ -57,6 +57,7 @@ const String createProfileLabel = "Create profile";
 const String emailLabel = "Email";
 const String passwordLabel = "Password";
 const String confirmPasswordLabel = "Confirm password";
+const String creatingProfileLabel = "Creating profile...";
 const String mismatchedPasswordLabel = "Passwords do not match";
 const String loginFailedDialogTitle = "Login failed";
 const String loginFailedDialogMsg = "Invalid credentials";

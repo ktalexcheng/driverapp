@@ -74,7 +74,7 @@ class AuthenticationRepository {
     AuthenticationResponse authResponse =
         await authApi.createUser(email, hashedPassword);
 
-    if (authResponse.httpCode == 200) {
+    if (authResponse.httpCode == 201) {
       String token = authResponse.token!.tokenString;
       // SharedPreferences prefs = await SharedPreferences.getInstance();
       // await prefs.setString(_tokenKey, token);

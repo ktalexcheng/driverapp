@@ -17,7 +17,7 @@ class AuthenticationAPI {
   final String authUrl = '${constants.trailbrakeApiUrl}/auth';
   http.Client client = http.Client();
 
-  Future<AuthenticationResponse> postCredentials(
+  Future<http.Response> postCredentials(
       Uri url, String email, Digest hashedPassword) async {
     final headers = {'Content-Type': 'application/json'};
     final body =
@@ -25,19 +25,20 @@ class AuthenticationAPI {
 
     final response = await client.post(url, headers: headers, body: body);
 
-    if (response.statusCode == 200) {
-      var responseBody = jsonDecode(response.body);
-
-      return AuthenticationResponse(200, Token.fromJson(responseBody));
-    } else {
-      return AuthenticationResponse(response.statusCode, null);
-    }
+    return response;
   }
 
   Future<AuthenticationResponse> getToken(
       String email, Digest hashedPassword) async {
     final url = Uri.parse('$authUrl/token');
-    return postCredentials(url, email, hashedPassword);
+    final response = await postCredentials(url, email, hashedPassword);
+
+    if (response.statusCode == 200) {
+      var responseBody = jsonDecode(response.body);
+      return AuthenticationResponse(200, Token.fromJson(responseBody));
+    } else {
+      return AuthenticationResponse(response.statusCode, null);
+    }
   }
 
   Future<AuthenticationResponse> validateToken(String token) async {
@@ -55,6 +56,13 @@ class AuthenticationAPI {
   Future<AuthenticationResponse> createUser(
       String email, Digest hashedPassword) async {
     final url = Uri.parse('$authUrl/signup');
-    return postCredentials(url, email, hashedPassword);
+    final response = await postCredentials(url, email, hashedPassword);
+
+    if (response.statusCode == 201) {
+      var responseBody = jsonDecode(response.body);
+      return AuthenticationResponse(201, Token.fromJson(responseBody));
+    } else {
+      return AuthenticationResponse(response.statusCode, null);
+    }
   }
 }
