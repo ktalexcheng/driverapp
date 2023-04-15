@@ -1,6 +1,6 @@
-import 'package:trailbrake/src/common/constants.dart' as constants;
-
 import 'package:flutter/material.dart';
+
+import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class AppCanvas extends StatelessWidget {
   const AppCanvas({super.key, required this.child});

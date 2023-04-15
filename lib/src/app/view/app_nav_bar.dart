@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trailbrake/src/app/cubit/cubit.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
+import 'package:trailbrake/src/ride/ride.dart';
 
 class AppNavigationBar extends StatelessWidget {
   const AppNavigationBar({super.key, required this.initialIndex});
@@ -42,6 +43,7 @@ class AppNavigationBar extends StatelessWidget {
             if (index == 0) {
               context.read<AppNavigationCubit>().viewDashboard();
             } else if (index == 1) {
+              context.read<RideActivityCubit>().prepareRide();
               context.read<AppNavigationCubit>().newRideActivity();
             } else if (index == 2) {
               context.read<AppNavigationCubit>().viewProfile();

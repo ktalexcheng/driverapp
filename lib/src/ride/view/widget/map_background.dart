@@ -4,18 +4,23 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:trailbrake/src/ride/cubit/cubit.dart';
 
-mixin MapBackgroundMixin on StatelessWidget {
-  late final GoogleMapController? googleMapController;
+class MapBackground extends StatefulWidget {
+  const MapBackground({super.key});
+
+  @override
+  State<MapBackground> createState() => _MapBackgroundState();
 }
 
-class MapBackground extends StatelessWidget with MapBackgroundMixin {
-  MapBackground({super.key});
-
-  // late final GoogleMapController? googleMapController;
+class _MapBackgroundState extends State<MapBackground> {
+  late GoogleMapController? googleMapController;
   static const LatLng initialLocation = LatLng(0, 0);
   static const double mapZoomLevel = 17;
   final Set<Marker> mapMarkers = <Marker>{};
   final List<LatLng> mapLatLngs = <LatLng>[];
+
+  void _onMapCreated(GoogleMapController controller) {
+    googleMapController = controller;
+  }
 
   void _updateMapLocation(LatLng newLocation) {
     googleMapController?.animateCamera(
@@ -26,11 +31,6 @@ class MapBackground extends StatelessWidget with MapBackgroundMixin {
         ),
       ),
     );
-
-    // mapMarkers.add(Marker(
-    //   markerId: const MarkerId('nowLocation'),
-    //   position: newLocation,
-    // ));
 
     mapLatLngs.add(newLocation);
   }
@@ -77,7 +77,7 @@ class MapBackground extends StatelessWidget with MapBackgroundMixin {
               myLocationEnabled: true,
               myLocationButtonEnabled: false,
               zoomControlsEnabled: false,
-              onMapCreated: (controller) => googleMapController = controller,
+              onMapCreated: _onMapCreated,
               initialCameraPosition: const CameraPosition(
                 target: initialLocation,
                 zoom: mapZoomLevel,

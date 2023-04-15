@@ -20,8 +20,8 @@ class TrailbrakeApp extends StatelessWidget {
   Widget build(BuildContext context) {
     if (foundation.kDebugMode) {
       Wakelock.enable();
-      AuthenticationRepository authRepository = AuthenticationRepository();
-      authRepository.clearPreferences();
+      // AuthenticationRepository authRepository = AuthenticationRepository();
+      // authRepository.clearPreferences();
       Bloc.observer = DebugBlocObserver();
     }
 

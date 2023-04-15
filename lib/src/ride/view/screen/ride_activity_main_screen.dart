@@ -40,7 +40,7 @@ class RideActivityMainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        MapBackground(),
+        const MapBackground(),
         SafeArea(
           child: BlocConsumer<RideActivityCubit, RideActivityState>(
             listener: (context, state) {
@@ -78,18 +78,6 @@ class RideActivityMainScreen extends StatelessWidget {
                   state is RideActivityPaused) {
                 return const RideActivityOngoingScreen();
               } else if (state is RideActivitySaveInProgress) {
-                // return SizedBox(
-                //   width: double.infinity,
-                //   child: Column(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     crossAxisAlignment: CrossAxisAlignment.center,
-                //     children: const [
-                //       CircularProgressIndicator(),
-                //       SizedBox(height: constants.widgetSpacing),
-                //       Text(constants.savingInProgressMessage),
-                //     ],
-                //   ),
-                // );
                 return const BusyIndicator(
                     indicatorLabel: constants.savingInProgressMessage);
               } else if (state is RideActivitySaveSuccess) {

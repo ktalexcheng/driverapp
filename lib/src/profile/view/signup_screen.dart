@@ -6,7 +6,6 @@ import 'package:crypto/crypto.dart';
 
 import 'package:trailbrake/src/common/common.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
-import 'package:trailbrake/src/common/widget/busy_indicator.dart';
 import 'package:trailbrake/src/profile/cubit/user_profile_cubit.dart';
 
 class SignupScreen extends StatelessWidget {
