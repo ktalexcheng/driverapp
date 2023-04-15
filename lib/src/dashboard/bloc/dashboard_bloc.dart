@@ -26,6 +26,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
     }
 
     RideDataAPIResponse response = await _rideDataClient.getRideCatalog();
+    List<RideRecord> rideCatalog = response.responseBody;
+    rideCatalog.sort((a, b) => b.rideDate.compareTo(a.rideDate));
 
     if (response.httpCode == 200) {
       emit(DashboardGetCatalogSuccess(rideCatalog: response.responseBody));

@@ -23,9 +23,11 @@ class RideDataAPI {
     if (response.statusCode == 200) {
       var responseBody = jsonDecode(response.body);
 
-      responseBody.forEach((element) {
-        allRideHistory.add(RideRecord.fromJson(element));
-      });
+      if (responseBody != null) {
+        responseBody.forEach((element) {
+          allRideHistory.add(RideRecord.fromJson(element));
+        });
+      }
 
       return RideDataAPIResponse(200, allRideHistory);
     } else {
@@ -55,8 +57,7 @@ class RideDataAPI {
     if (response.statusCode == 201) {
       final responseJson = jsonDecode(response.body);
 
-      return RideDataAPIResponse(
-          201, RideRecord.fromJson(responseJson['rideRecord']));
+      return RideDataAPIResponse(201, RideRecord.fromJson(responseJson));
     } else {
       return RideDataAPIResponse(response.statusCode, response.body);
     }
@@ -65,8 +66,8 @@ class RideDataAPI {
   Future<RideDataAPIResponse> deleteRideData(String id) async {
     final response = await client.delete(Uri.parse('$baseUrl/rides/$id'));
 
-    if (response.statusCode == 200) {
-      return RideDataAPIResponse(200, true);
+    if (response.statusCode == 204) {
+      return RideDataAPIResponse(204, true);
     } else {
       return RideDataAPIResponse(response.statusCode, false);
     }

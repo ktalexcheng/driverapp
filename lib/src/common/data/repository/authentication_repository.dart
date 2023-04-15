@@ -7,7 +7,7 @@ import 'package:trailbrake/src/common/data/provider/provider.dart';
 class AuthenticationRepository {
   final secureStorage = const FlutterSecureStorage();
 
-  static const String _tokenKey = 'token';
+  static const String _tokenKey = 'userAuthToken';
   final AuthenticationAPI authApi = AuthenticationAPI();
 
   void clearPreferences() async {
@@ -19,7 +19,7 @@ class AuthenticationRepository {
   Future<bool> isAuthenticated() async {
     // SharedPreferences prefs = await SharedPreferences.getInstance();
     // String? token = prefs.getString(_tokenKey);
-    String? token = await secureStorage.read(key: _tokenKey);
+    String? token = await getToken();
 
     return token != null;
   }
@@ -30,6 +30,22 @@ class AuthenticationRepository {
     String? token = await secureStorage.read(key: _tokenKey);
 
     return token;
+  }
+
+  Future<bool> validateToken() async {
+    String? token = await getToken();
+
+    if (token != null) {
+      AuthenticationResponse authResponse = await authApi.validateToken(token);
+
+      if (authResponse.httpCode == 200) {
+        return true;
+      } else {
+        await secureStorage.delete(key: _tokenKey);
+      }
+    }
+
+    return false;
   }
 
   Future<String?> login(String email, Digest hashedPassword) async {

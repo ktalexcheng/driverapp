@@ -25,7 +25,10 @@ class NewRide extends Ride {
 
     return {
       'rideName': super.rideName,
-      'rideDate': super.rideDate.toIso8601String(),
+      'rideDate': super
+          .rideDate
+          .toUtc()
+          .toIso8601String(), // Convert to UTC then to ISO8601 for RFC3339 format
       'rideData': _rideDataList,
     };
   }
@@ -59,7 +62,7 @@ class SavedRide extends Ride {
     return SavedRide(
       id: json['_id'],
       rideName: json['rideName'],
-      rideDate: DateTime.parse(json['rideDate']),
+      rideDate: DateTime.parse(json['rideDate']).toLocal(),
       rideScore: RideScore.fromJson(json['rideScore']),
       rideMeta: RideMeta.fromJson(json['rideMeta']),
       rideData: _rideData,

@@ -36,6 +36,7 @@ const String saveRidePromptMessage =
     "Would you like to save data for this ride?";
 const String savingInProgressMessage = "Saving ride...";
 const String saveSuccessfulMessage = "Ride saved!";
+const String guestModeActivity = "Please login to start recording a ride.";
 
 /// Displayed strings - Ride summary screen
 const String rideSummaryScreenTitle = "Ride completed!";

@@ -10,18 +10,31 @@ import 'package:trailbrake/src/ride/data/data.dart';
 part 'ride_activity_state.dart';
 
 class RideActivityCubit extends Cubit<RideActivityState> {
-  RideActivityCubit() : super(RideActivityInitial()) {
-    prepareRide();
+  RideActivityCubit() : super(RideActivityInitial());
+
+  ActiveRideRepository rideDataRepository = ActiveRideRepository(SensorAPI());
+  StreamSubscription? rideDataSubscription;
+  final AuthenticationRepository authRepository = AuthenticationRepository();
+
+  void guestMode() async {
+    emit(RideActivityUnauthenticated());
   }
 
-  ActiveRideRepository rideDataRepository = ActiveRideRepository();
-  StreamSubscription? rideDataSubscription;
-
   void prepareRide() async {
-    await rideDataRepository.initRide();
+    bool tokenValid = await authRepository.validateToken();
 
-    emit(RideActivityPrepareSuccess(
-        initialLocation: rideDataRepository.initialLatLng));
+    if (tokenValid) {
+      bool initSuccess = await rideDataRepository.initRide();
+
+      if (initSuccess) {
+        emit(RideActivityPrepareSuccess(
+            initialLocation: rideDataRepository.initialLatLng));
+      } else {
+        emit(RideActivityPrepareFailure());
+      }
+    } else {
+      emit(RideActivityUnauthenticated());
+    }
   }
 
   void startRide() {

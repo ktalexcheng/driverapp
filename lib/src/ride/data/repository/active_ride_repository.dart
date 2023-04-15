@@ -50,22 +50,23 @@ class _SensorDataBuffer extends SensorData {
 }
 
 class ActiveRideRepository {
-  ActiveRideRepository();
+  ActiveRideRepository(this.sensorController);
 
-  ActiveRideRepository.fromJson(Map<String, dynamic> json) {
-    json.forEach(
-      (key, value) {
-        rideData.addData(SensorData.fromJson(value));
-      },
-    );
-  }
+  // ActiveRideRepository.fromJson(Map<String, dynamic> json) {
+  //   json.forEach(
+  //     (key, value) {
+  //       rideData.addData(SensorData.fromJson(value));
+  //     },
+  //   );
+  // }
 
   StreamController<SensorData> rideDataStreamController =
       StreamController<SensorData>();
   _SensorDataBuffer _dataBuffer = _SensorDataBuffer();
   RideData rideData = RideData();
 
-  SensorAPI sensorController = SensorAPI();
+  // SensorAPI sensorController = SensorAPI();
+  SensorAPI sensorController;
   StreamSubscription? accelSubscription;
   StreamSubscription? gyroSubscription;
   StreamSubscription? locationSubscription;
@@ -76,13 +77,20 @@ class ActiveRideRepository {
   bool locationUpdated = false;
   LatLng initialLatLng = const LatLng(0, 0);
 
-  Future<void> initRide() async {
+  Future<bool> initRide() async {
     // Sensors must be fully initialized before proceeding
-    await sensorController.initSensors();
+    bool sensorsReady = await sensorController.checkSensors();
+    if (sensorsReady) {
+      await sensorController.initSensors();
 
-    // Get current location
-    Position nowLocation = await sensorController.getCurrentLocation();
-    initialLatLng = LatLng(nowLocation.latitude, nowLocation.longitude);
+      // Get current location
+      Position nowLocation = await sensorController.getCurrentLocation();
+      initialLatLng = LatLng(nowLocation.latitude, nowLocation.longitude);
+
+      return Future.value(true);
+    }
+
+    return Future.value(false);
   }
 
   void addDataToRide() {
@@ -168,12 +176,28 @@ class ActiveRideRepository {
     rideData = RideData();
   }
 
+  // void _addAccelDataToBuffer(sensorEvent) {
+  //   _dataBuffer.accelerometerData = sensorEvent.data;
+  // }
+
+  // void _addGyroDataToBuffer(sensorEvent) {
+  //   _dataBuffer.gyroscopeData = sensorEvent.data;
+  // }
+
   void _addAccelDataToBuffer(sensorEvent) {
-    _dataBuffer.accelerometerData = sensorEvent.data;
+    _dataBuffer.accelerometerData = [
+      sensorEvent.x,
+      sensorEvent.y,
+      sensorEvent.z,
+    ];
   }
 
   void _addGyroDataToBuffer(sensorEvent) {
-    _dataBuffer.gyroscopeData = sensorEvent.data;
+    _dataBuffer.gyroscopeData = [
+      sensorEvent.x,
+      sensorEvent.y,
+      sensorEvent.z,
+    ];
   }
 
   void _addLocDataToBuffer(sensorEvent) {

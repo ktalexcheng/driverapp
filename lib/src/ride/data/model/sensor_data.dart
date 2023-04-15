@@ -28,7 +28,7 @@ class SensorData {
   late Duration? elapsedSeconds;
 
   SensorData.fromJson(Map<String, dynamic> json) {
-    timestamp = DateTime.parse(json['timestamp']);
+    timestamp = DateTime.parse(json['timestamp']).toLocal();
     locationLat = _jsonValueToDouble(json['locationLat']);
     locationLong = _jsonValueToDouble(json['locationLong']);
     accelerometerX = _jsonValueToDouble(json['accelerometerX']);
@@ -41,7 +41,9 @@ class SensorData {
 
   Map<String, dynamic> toJson() {
     return {
-      'timestamp': timestamp.toIso8601String(),
+      'timestamp': timestamp
+          .toUtc()
+          .toIso8601String(), // Convert to UTC then to ISO8601 for RFC3339 format
       'gyroscopeX': gyroscopeX,
       'gyroscopeY': gyroscopeY,
       'gyroscopeZ': gyroscopeZ,

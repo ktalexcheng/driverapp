@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:trailbrake/src/ride/ride.dart';
+import 'package:trailbrake/src/dashboard/dashboard.dart';
+import 'package:trailbrake/src/profile/profile.dart';
 import 'package:trailbrake/src/common/constants.dart' as constants;
 
 class RideActivityMainScreen extends StatelessWidget {
@@ -38,15 +40,18 @@ class RideActivityMainScreen extends StatelessWidget {
     return Stack(
       children: [
         MapBackground(),
-        SizedBox.expand(
+        SafeArea(
           child: BlocConsumer<RideActivityCubit, RideActivityState>(
             listener: (context, state) {
               if (state is RideActivitySaveSuccess) {
                 _showSaveSuccessfulNotification(context);
                 Navigator.of(context)
                     .pushNamed('/ride/rideScore', arguments: context);
+                context.read<DashboardBloc>().add(DashboardCatalogRequested());
+                context.read<UserProfileCubit>().getUserProfileData();
               }
             },
+            // child: BlocBuilder<RideActivityCubit, RideActivityState>(
             buildWhen: (previous, current) {
               if (previous != current) {
                 return true;
@@ -55,8 +60,18 @@ class RideActivityMainScreen extends StatelessWidget {
               }
             },
             builder: (context, state) {
-              if (state is RideActivityInitial ||
-                  state is RideActivityPrepareSuccess) {
+              if (state is RideActivityUnauthenticated) {
+                return Container(
+                  padding: constants.appDefaultPadding,
+                  child: const Center(
+                    child: Text(constants.guestModeActivity),
+                  ),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .tertiaryContainer
+                      .withOpacity(constants.overlayOpacity),
+                );
+              } else if (state is RideActivityPrepareSuccess) {
                 return const RideActivityReadyScreen();
               } else if (state is RideActivityNewRideInProgress ||
                   state is RideActivityPaused) {
@@ -80,6 +95,7 @@ class RideActivityMainScreen extends StatelessWidget {
                 return const Text(constants.invalidStateMessage);
               }
             },
+            // ),
           ),
         ),
       ],

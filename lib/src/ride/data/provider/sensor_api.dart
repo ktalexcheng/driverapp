@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter_sensors/flutter_sensors.dart';
+// import 'package:flutter_sensors/flutter_sensors.dart';
+import 'package:sensors_plus/sensors_plus.dart' as sp;
 import 'package:geolocator/geolocator.dart';
 
 class SensorAPI {
@@ -22,21 +23,24 @@ class SensorAPI {
   late bool locationRunning;
 
   Future<bool> checkSensors() async {
-    accelAvailable = await accelSensor.checkAccelerometerStatus();
-    gyroAvailable = await gyroSensor.checkGyroscopeStatus();
+    accelAvailable = await accelSensor.checkSensor();
+    gyroAvailable = await gyroSensor.checkSensor();
     locationAvailable = await locationSensor.checkLocationStatus();
 
     return accelAvailable && gyroAvailable && locationAvailable;
   }
 
   Future<void> initSensors() async {
-    if (await checkSensors()) {
-      accelStream = await accelSensor.getAccelerometerStream();
-      gyroStream = await gyroSensor.getGyroscopeStream();
-      locationStream = await locationSensor.getLocationStream();
-
+    if (accelAvailable) {
+      accelStream = accelSensor.sensorStream;
       accelRunning = true;
+    }
+    if (gyroAvailable) {
+      gyroStream = gyroSensor.sensorStream;
       gyroRunning = true;
+    }
+    if (locationAvailable) {
+      locationStream = await locationSensor.getLocationStream();
       locationRunning = true;
     }
   }
@@ -46,56 +50,100 @@ class SensorAPI {
 }
 
 // Accelerometer utilities
+// class AccelerometerSensor {
+//   AccelerometerSensor() : sensorStatus = Future.value(false) {
+//     sensorStatus = checkAccelerometerStatus();
+//   }
+
+//   Future<bool> sensorStatus;
+//   Stream? accelStream;
+
+//   Future<bool> checkAccelerometerStatus() async {
+//     return await SensorManager().isSensorAvailable(Sensors.LINEAR_ACCELERATION);
+//   }
+
+//   Future<Stream?> getAccelerometerStream() async {
+//     if (await sensorStatus) {
+//       Stream accelStream = await SensorManager().sensorUpdates(
+//         sensorId: Sensors.LINEAR_ACCELERATION,
+//         interval: Sensors.SENSOR_DELAY_FASTEST,
+//       );
+
+//       return accelStream;
+//     } else {
+//       return null;
+//     }
+//   }
+// }
+
 class AccelerometerSensor {
-  AccelerometerSensor() : sensorStatus = Future.value(false) {
-    sensorStatus = checkAccelerometerStatus();
-  }
+  AccelerometerSensor() : sensorAvailable = false;
 
-  Future<bool> sensorStatus;
-  Stream? accelStream;
+  bool sensorAvailable;
+  Stream? sensorStream;
 
-  Future<bool> checkAccelerometerStatus() async {
-    return await SensorManager().isSensorAvailable(Sensors.LINEAR_ACCELERATION);
-  }
-
-  Future<Stream?> getAccelerometerStream() async {
-    if (await sensorStatus) {
-      Stream accelStream = await SensorManager().sensorUpdates(
-        sensorId: Sensors.LINEAR_ACCELERATION,
-        interval: Sensors.SENSOR_DELAY_FASTEST,
-      );
-
-      return accelStream;
-    } else {
-      return null;
+  Future<bool> checkSensor() async {
+    try {
+      sensorAvailable = !(await sp.userAccelerometerEvents.isEmpty);
+    } on Error {
+      // Catch error when sensor stream is empty (not available)
+      sensorAvailable = false;
     }
+
+    if (sensorAvailable) {
+      sensorStream = sp.userAccelerometerEvents;
+    }
+
+    return sensorAvailable;
   }
 }
 
 // Gyroscope utilities
+// class GyroscopeSensor {
+//   GyroscopeSensor() : sensorStatus = Future.value(false) {
+//     sensorStatus = checkGyroscopeStatus();
+//   }
+
+//   Future<bool> sensorStatus;
+//   Stream? gyroStream;
+
+//   Future<bool> checkGyroscopeStatus() async {
+//     return await SensorManager().isSensorAvailable(Sensors.ACCELEROMETER);
+//   }
+
+//   Future<Stream?> getGyroscopeStream() async {
+//     if (await sensorStatus) {
+//       Stream gyroStream = await SensorManager().sensorUpdates(
+//         sensorId: Sensors.GYROSCOPE,
+//         interval: Sensors.SENSOR_DELAY_FASTEST,
+//       );
+
+//       return gyroStream;
+//     } else {
+//       return null;
+//     }
+//   }
+// }
+
 class GyroscopeSensor {
-  GyroscopeSensor() : sensorStatus = Future.value(false) {
-    sensorStatus = checkGyroscopeStatus();
-  }
+  GyroscopeSensor() : sensorAvailable = false;
 
-  Future<bool> sensorStatus;
-  Stream? gyroStream;
+  bool sensorAvailable;
+  Stream? sensorStream;
 
-  Future<bool> checkGyroscopeStatus() async {
-    return await SensorManager().isSensorAvailable(Sensors.ACCELEROMETER);
-  }
-
-  Future<Stream?> getGyroscopeStream() async {
-    if (await sensorStatus) {
-      Stream gyroStream = await SensorManager().sensorUpdates(
-        sensorId: Sensors.GYROSCOPE,
-        interval: Sensors.SENSOR_DELAY_FASTEST,
-      );
-
-      return gyroStream;
-    } else {
-      return null;
+  Future<bool> checkSensor() async {
+    try {
+      sensorAvailable = !(await sp.gyroscopeEvents.isEmpty);
+    } on Error {
+      // Catch error when sensor stream is empty (not available)
+      sensorAvailable = false;
     }
+
+    if (sensorAvailable) {
+      sensorStream = sp.gyroscopeEvents;
+    }
+
+    return sensorAvailable;
   }
 }
 

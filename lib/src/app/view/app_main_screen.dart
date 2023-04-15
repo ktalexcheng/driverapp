@@ -19,7 +19,7 @@ class AppMainScreen extends StatelessWidget {
           create: (context) => AppNavigationCubit(),
         ),
         BlocProvider(
-          create: (context) => UserAuthCubit(),
+          create: (context) => UserAuthCubit()..checkLocalToken(),
         ),
         BlocProvider(
           create: (context) => UserProfileCubit(),
@@ -36,11 +36,15 @@ class AppMainScreen extends StatelessWidget {
         bottomNavigationBar: const AppNavigationBar(initialIndex: 2),
         body: BlocListener<UserAuthCubit, UserAuthState>(
           listener: (context, state) {
-            if (state is UserAuthLoginSuccess) {
+            if (state is UserAuthInitial) {
+            } else if (state is UserAuthLoginSuccess) {
               context.read<UserProfileCubit>().getUserProfileData();
+              context.read<RideActivityCubit>().prepareRide();
               context.read<DashboardBloc>().add(DashboardCatalogRequested());
-            } else if (state is UserAuthLogoutSuccess) {
+            } else if (state is UserAuthLogoutSuccess ||
+                state is UserAuthSessionExpired) {
               context.read<UserProfileCubit>().guestMode();
+              context.read<RideActivityCubit>().guestMode();
               context.read<DashboardBloc>().add(DashboardUserLogout());
             }
           },

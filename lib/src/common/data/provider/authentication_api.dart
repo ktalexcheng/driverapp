@@ -30,7 +30,7 @@ class AuthenticationAPI {
 
       return AuthenticationResponse(200, Token.fromJson(responseBody));
     } else {
-      return AuthenticationResponse(401, null);
+      return AuthenticationResponse(response.statusCode, null);
     }
   }
 
@@ -38,6 +38,18 @@ class AuthenticationAPI {
       String email, Digest hashedPassword) async {
     final url = Uri.parse('$authUrl/token');
     return postCredentials(url, email, hashedPassword);
+  }
+
+  Future<AuthenticationResponse> validateToken(String token) async {
+    final url = Uri.parse('$authUrl/token');
+    final headers = {'Authorization': 'Bearer $token'};
+    final response = await client.head(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      return AuthenticationResponse(200, Token(tokenString: token));
+    } else {
+      return AuthenticationResponse(response.statusCode, null);
+    }
   }
 
   Future<AuthenticationResponse> createUser(

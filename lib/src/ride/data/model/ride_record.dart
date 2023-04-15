@@ -20,7 +20,7 @@ class RideRecord with RideRecordMixin {
     return RideRecord(
       id: json['_id'],
       rideName: json['rideName'],
-      rideDate: DateTime.parse(json['rideDate']),
+      rideDate: DateTime.parse(json['rideDate']).toLocal(),
       rideScore: RideScore.fromJson(json['rideScore']),
       rideMeta: RideMeta.fromJson(json['rideMeta']),
     );

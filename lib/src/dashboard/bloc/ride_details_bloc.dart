@@ -37,7 +37,7 @@ class RideDetailsBloc extends Bloc<RideDetailsEvent, RideDetailsState> {
     RideDataAPIResponse response =
         await rideDataClient.deleteRideData(event.rideId);
 
-    if (response.httpCode == 200) {
+    if (response.httpCode == 204) {
       emit(RideDetailsDeleteSuccess());
     } else {
       emit(RideDetailsDeleteFailure());

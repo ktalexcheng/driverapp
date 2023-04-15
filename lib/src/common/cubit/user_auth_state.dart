@@ -5,6 +5,8 @@ abstract class UserAuthState {}
 
 class UserAuthInitial extends UserAuthState {}
 
+class UserAuthSessionExpired extends UserAuthState {}
+
 class UserAuthLoginInProgress extends UserAuthState {}
 
 class UserAuthLoginSuccess extends UserAuthState {}

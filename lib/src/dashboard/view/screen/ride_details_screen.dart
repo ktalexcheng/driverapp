@@ -132,6 +132,8 @@ class RideDetailsScreen extends StatelessWidget {
             context.read<DashboardBloc>().add(DashboardCatalogRequested());
 
             Navigator.of(context).pop();
+          } else if (state is RideDetailsGetFailure) {
+            context.read<DashboardBloc>().add(DashboardCatalogRequested());
           }
         },
         builder: (context, state) {

@@ -5,11 +5,15 @@ abstract class RideActivityState {}
 
 class RideActivityInitial extends RideActivityState {}
 
+class RideActivityUnauthenticated extends RideActivityState {}
+
 class RideActivityPrepareSuccess extends RideActivityState {
   RideActivityPrepareSuccess({required this.initialLocation});
 
   final LatLng initialLocation;
 }
+
+class RideActivityPrepareFailure extends RideActivityState {}
 
 class RideActivityNewRideInProgress extends RideActivityState {
   RideActivityNewRideInProgress(

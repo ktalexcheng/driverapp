@@ -11,6 +11,19 @@ class UserAuthCubit extends Cubit<UserAuthState> {
 
   final AuthenticationRepository authRepository = AuthenticationRepository();
 
+  void checkLocalToken() async {
+    emit(UserAuthLoginInProgress());
+
+    // Perform authentication
+    bool tokenValid = await authRepository.validateToken();
+
+    if (tokenValid) {
+      emit(UserAuthLoginSuccess());
+    } else {
+      emit(UserAuthSessionExpired());
+    }
+  }
+
   void signInWithEmailPass(String email, Digest hashedPassword) async {
     emit(UserAuthLoginInProgress());
 
