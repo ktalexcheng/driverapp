@@ -1,8 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:trailbrake/src/ride/cubit/cubit.dart';
+import 'package:trailbrake/src/ride/data/data.dart';
 
 class MapBackground extends StatefulWidget {
   const MapBackground({super.key});
@@ -17,6 +19,7 @@ class _MapBackgroundState extends State<MapBackground> {
   static const double mapZoomLevel = 17;
   final Set<Marker> mapMarkers = <Marker>{};
   final List<LatLng> mapLatLngs = <LatLng>[];
+  final SensorAPI sensorController = SensorAPI();
 
   void _onMapCreated(GoogleMapController controller) {
     googleMapController = controller;
@@ -35,7 +38,10 @@ class _MapBackgroundState extends State<MapBackground> {
     mapLatLngs.add(newLocation);
   }
 
-  void _lastLocation() {
+  void _lastLocation() async {
+    Position nowLocation = await sensorController.getCurrentLocation();
+    mapLatLngs.add(LatLng(nowLocation.latitude, nowLocation.longitude));
+
     googleMapController?.animateCamera(
       CameraUpdate.newCameraPosition(
         CameraPosition(

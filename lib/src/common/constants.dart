@@ -36,6 +36,8 @@ const String saveRidePromptMessage =
     "Would you like to save data for this ride?";
 const String savingInProgressMessage = "Saving ride...";
 const String saveSuccessfulMessage = "Ride saved!";
+const String saveFailureMessage =
+    "WARNING! Ride save to database failed! Data is available only locally.";
 const String guestModeActivity = "Please login to start recording a ride.";
 
 /// Displayed strings - Ride summary screen

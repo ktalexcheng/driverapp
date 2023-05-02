@@ -60,6 +60,10 @@ class RideActivityCubit extends Cubit<RideActivityState> {
   }
 
   void saveRide(String rideName) async {
+    // TODO: DEBUG ONLY
+    rideDataRepository.dumpToLocalStorage(rideName);
+    // TODO: DEBUG ONLY
+
     if (state is RideActivityPaused) {
       emit(RideActivitySaveInProgress());
 

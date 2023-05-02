@@ -13,7 +13,7 @@ class ScoreProfile extends StatelessWidget {
       children: [
         ConstrainedBox(
           child: Text(title),
-          constraints: const BoxConstraints(minWidth: 80),
+          constraints: const BoxConstraints(minWidth: 100),
         ),
         constants.columnSpacer,
         Expanded(
@@ -33,7 +33,7 @@ class ScoreProfile extends StatelessWidget {
         padding: constants.appDefaultPadding,
         child: Column(
           children: [
-            profileBar("Speed", scores.speed),
+            profileBar("Comfort", scores.comfort),
             constants.rowSpacer,
             profileBar("Acceleration", scores.acceleration),
             constants.rowSpacer,

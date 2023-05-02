@@ -1,6 +1,6 @@
 import 'dart:async';
 
-// import 'package:flutter_sensors/flutter_sensors.dart';
+import 'package:flutter_sensors/flutter_sensors.dart';
 import 'package:sensors_plus/sensors_plus.dart' as sp;
 import 'package:geolocator/geolocator.dart';
 
@@ -11,23 +11,32 @@ class SensorAPI {
   GyroscopeSensor gyroSensor = GyroscopeSensor();
   Stream? gyroStream;
 
+  RotationSensor rotationSensor = RotationSensor();
+  Stream? rotationStream;
+
   LocationSensor locationSensor = LocationSensor();
   Stream? locationStream;
 
   late bool accelAvailable;
   late bool gyroAvailable;
+  late bool rotationAvailable;
   late bool locationAvailable;
 
   late bool accelRunning;
   late bool gyroRunning;
+  late bool rotationRunning;
   late bool locationRunning;
 
   Future<bool> checkSensors() async {
     accelAvailable = await accelSensor.checkSensor();
     gyroAvailable = await gyroSensor.checkSensor();
+    rotationAvailable = await rotationSensor.checkSensor();
     locationAvailable = await locationSensor.checkLocationStatus();
 
-    return accelAvailable && gyroAvailable && locationAvailable;
+    return accelAvailable &&
+        gyroAvailable &&
+        rotationAvailable &&
+        locationAvailable;
   }
 
   Future<void> initSensors() async {
@@ -38,6 +47,10 @@ class SensorAPI {
     if (gyroAvailable) {
       gyroStream = gyroSensor.sensorStream;
       gyroRunning = true;
+    }
+    if (rotationAvailable) {
+      rotationStream = rotationSensor.sensorStream;
+      rotationRunning = true;
     }
     if (locationAvailable) {
       locationStream = await locationSensor.getLocationStream();
@@ -76,6 +89,37 @@ class SensorAPI {
 //   }
 // }
 
+/// Read rotation vector data (composite reading of accelerometer + gyroscope)
+class RotationSensor {
+  RotationSensor() : sensorAvailable = false;
+
+  bool sensorAvailable;
+  Stream? sensorStream;
+
+  Future<bool> checkSensor() async {
+    Stream _rotationStream = await SensorManager().sensorUpdates(
+      sensorId: Sensors.ROTATION,
+      interval: Sensors.SENSOR_DELAY_NORMAL,
+    );
+
+    try {
+      sensorAvailable = !(await _rotationStream.isEmpty);
+    } on Error {
+      // Catch error when sensor stream is empty (not available)
+      sensorAvailable = false;
+    }
+
+    if (sensorAvailable) {
+      sensorStream = _rotationStream;
+    }
+
+    return sensorAvailable;
+  }
+}
+
+/// Using accelerometer data with gravity effect
+/// so we can use the gravity vector when vehicle is stationary
+/// as part of the calibration for accelerometer data.
 class AccelerometerSensor {
   AccelerometerSensor() : sensorAvailable = false;
 
@@ -125,6 +169,7 @@ class AccelerometerSensor {
 //   }
 // }
 
+/// Gyroscope utilities
 class GyroscopeSensor {
   GyroscopeSensor() : sensorAvailable = false;
 
@@ -147,7 +192,7 @@ class GyroscopeSensor {
   }
 }
 
-// Location utilities
+/// Location utilities
 class LocationSensor {
   LocationSensor() : sensorStatus = Future.value(false) {
     sensorStatus = checkLocationStatus();

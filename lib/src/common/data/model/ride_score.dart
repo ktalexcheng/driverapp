@@ -5,6 +5,7 @@ class RideScore {
     required this.braking,
     required this.cornering,
     required this.speed,
+    required this.comfort,
   });
 
   RideScore.fromJson(Map<String, dynamic> json)
@@ -12,7 +13,8 @@ class RideScore {
         acceleration = json['acceleration'] + 0.0,
         braking = json['braking'] + 0.0,
         cornering = json['cornering'] + 0.0,
-        speed = json['speed'] + 0.0;
+        speed = json['speed'] + 0.0,
+        comfort = json['comfort'] + 0.0;
   // {
   //   overall = json['overall'];
   //   acceleration = json['acceleration'];
@@ -26,4 +28,5 @@ class RideScore {
   final double braking;
   final double cornering;
   final double speed;
+  final double comfort;
 }

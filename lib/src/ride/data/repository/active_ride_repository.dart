@@ -1,7 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:csv/csv.dart';
+// import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:trailbrake/src/ride/data/model/model.dart';
 import 'package:trailbrake/src/ride/data/provider/provider.dart';
@@ -9,13 +13,15 @@ import 'package:trailbrake/src/ride/data/provider/provider.dart';
 class _SensorDataBuffer extends SensorData {
   _SensorDataBuffer()
       : accelDataReceived = false,
-        gyroDataReceived = false;
+        gyroDataReceived = false,
+        rotationDataReceived = false;
 
   late bool accelDataReceived;
   late bool gyroDataReceived;
+  late bool rotationDataReceived;
 
   bool ifBufferFull() {
-    if (accelDataReceived && gyroDataReceived) {
+    if (accelDataReceived && gyroDataReceived && rotationDataReceived) {
       timestamp = DateTime.now();
       return true;
     } else {
@@ -25,9 +31,9 @@ class _SensorDataBuffer extends SensorData {
 
   set accelerometerData(List<double> sensorData) {
     if (!accelDataReceived) {
-      super.accelerometerX = sensorData[2];
-      super.accelerometerY = sensorData[0];
-      super.accelerometerZ = sensorData[1];
+      super.accelerometerX = sensorData[0];
+      super.accelerometerY = sensorData[1];
+      super.accelerometerZ = sensorData[2];
 
       accelDataReceived = true;
     }
@@ -40,6 +46,17 @@ class _SensorDataBuffer extends SensorData {
       super.gyroscopeZ = sensorData[2];
 
       gyroDataReceived = true;
+    }
+  }
+
+  set rotationData(List<double> sensorData) {
+    if (!rotationDataReceived) {
+      super.rotationX = sensorData[0];
+      super.rotationY = sensorData[1];
+      super.rotationZ = sensorData[2];
+      super.rotationW = sensorData[3];
+
+      rotationDataReceived = true;
     }
   }
 
@@ -69,6 +86,7 @@ class ActiveRideRepository {
   SensorAPI sensorController;
   StreamSubscription? accelSubscription;
   StreamSubscription? gyroSubscription;
+  StreamSubscription? rotationSubscription;
   StreamSubscription? locationSubscription;
 
   double lastLocationLat = 0;
@@ -78,6 +96,17 @@ class ActiveRideRepository {
   LatLng initialLatLng = const LatLng(0, 0);
 
   Future<bool> initRide() async {
+    // TODO: DEBUG ONLY
+    var extStoragePermission = await Permission.storage.status;
+    while (true) {
+      if (!extStoragePermission.isGranted) {
+        await Permission.storage.request();
+      } else {
+        break;
+      }
+    }
+    // TODO: DEBUG ONLY
+
     // Sensors must be fully initialized before proceeding
     bool sensorsReady = await sensorController.checkSensors();
     if (sensorsReady) {
@@ -86,6 +115,8 @@ class ActiveRideRepository {
       // Get current location
       Position nowLocation = await sensorController.getCurrentLocation();
       initialLatLng = LatLng(nowLocation.latitude, nowLocation.longitude);
+      lastLocationLat = nowLocation.latitude;
+      lastLocationLong = nowLocation.longitude;
 
       return Future.value(true);
     }
@@ -103,6 +134,10 @@ class ActiveRideRepository {
         gyroscopeX: _dataBuffer.gyroscopeX,
         gyroscopeY: _dataBuffer.gyroscopeY,
         gyroscopeZ: _dataBuffer.gyroscopeZ,
+        rotationX: _dataBuffer.rotationX,
+        rotationY: _dataBuffer.rotationY,
+        rotationZ: _dataBuffer.rotationZ,
+        rotationW: _dataBuffer.rotationW,
         locationLat: lastLocationLat,
         locationLong: lastLocationLong,
         locationUpdated: locationUpdated,
@@ -142,6 +177,13 @@ class ActiveRideRepository {
       },
     );
 
+    rotationSubscription = sensorController.rotationStream?.listen(
+      (event) {
+        _addRotDataToBuffer(event);
+        addDataToRide();
+      },
+    );
+
     // Location data only updates on location change
     locationSubscription = sensorController.locationStream?.listen(
       (event) {
@@ -163,6 +205,11 @@ class ActiveRideRepository {
       gyroSubscription = null;
     }
 
+    if (rotationSubscription != null) {
+      rotationSubscription?.cancel();
+      rotationSubscription = null;
+    }
+
     if (locationSubscription != null) {
       locationSubscription?.cancel();
       locationSubscription = null;
@@ -174,6 +221,50 @@ class ActiveRideRepository {
   void clearRideData() {
     _dataBuffer = _SensorDataBuffer();
     rideData = RideData();
+  }
+
+  void dumpToLocalStorage(String rideName) async {
+    final rideDataList = [
+      [
+        "timestamp",
+        "gyroscopeX",
+        "gyroscopeY",
+        "gyroscopeZ",
+        "accelerometerX",
+        "accelerometerY",
+        "accelerometerZ",
+        "rotationX",
+        "rotationY",
+        "rotationZ",
+        "rotationW",
+        "locationLat",
+        "locationLong",
+      ],
+      ...rideData.data.map((r) => [
+            r.timestamp.toUtc().toIso8601String(),
+            r.gyroscopeX,
+            r.gyroscopeY,
+            r.gyroscopeZ,
+            r.accelerometerX,
+            r.accelerometerY,
+            r.accelerometerZ,
+            r.rotationX,
+            r.rotationY,
+            r.rotationZ,
+            r.rotationW,
+            r.locationLat,
+            r.locationLong,
+          ])
+    ];
+    String csvData = const ListToCsvConverter().convert(rideDataList);
+
+    // final saveDir = (await getApplicationDocumentsDirectory()).path;
+    final saveDir = Directory('/storage/emulated/0/Download')
+        .path; // TODO: This only works on Android
+    final savePath =
+        "$saveDir/tb_${DateTime.now().millisecondsSinceEpoch}_$rideName.csv";
+    final saveFile = File(savePath);
+    await saveFile.writeAsString(csvData);
   }
 
   // void _addAccelDataToBuffer(sensorEvent) {
@@ -197,6 +288,15 @@ class ActiveRideRepository {
       sensorEvent.x,
       sensorEvent.y,
       sensorEvent.z,
+    ];
+  }
+
+  void _addRotDataToBuffer(sensorEvent) {
+    _dataBuffer.rotationData = [
+      sensorEvent.data[0],
+      sensorEvent.data[1],
+      sensorEvent.data[2],
+      sensorEvent.data[3],
     ];
   }
 

@@ -14,6 +14,9 @@
     <!-- Added permissions for internet access -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Added permissions for background execution -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
         android:label="trailbrake"
         android:name="${applicationName}"

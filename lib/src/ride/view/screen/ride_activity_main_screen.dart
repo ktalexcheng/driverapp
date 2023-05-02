@@ -61,6 +61,9 @@ class RideActivityMainScreen extends StatelessWidget {
               }
             },
             builder: (context, state) {
+              if (state is RideActivityInitial) {
+                return Container();
+              }
               if (state is RideActivityUnauthenticated) {
                 return Container(
                   padding: constants.appDefaultPadding,
@@ -82,8 +85,14 @@ class RideActivityMainScreen extends StatelessWidget {
                     indicatorLabel: constants.savingInProgressMessage);
               } else if (state is RideActivitySaveSuccess) {
                 return Container();
+              } else if (state is RideActivitySaveFailure) {
+                return const Center(
+                  child: Text(constants.saveFailureMessage),
+                );
               } else {
-                return const Text(constants.invalidStateMessage);
+                return const Center(
+                  child: Text(constants.invalidStateMessage),
+                );
               }
             },
             // ),

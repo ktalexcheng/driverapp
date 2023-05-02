@@ -18,8 +18,9 @@ class TrailbrakeApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: Explore how to keep app active in background while tracking ride
+    Wakelock.enable();
     if (foundation.kDebugMode) {
-      Wakelock.enable();
       // AuthenticationRepository authRepository = AuthenticationRepository();
       // authRepository.clearPreferences();
       Bloc.observer = DebugBlocObserver();

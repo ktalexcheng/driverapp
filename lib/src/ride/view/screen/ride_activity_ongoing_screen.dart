@@ -29,53 +29,70 @@ class ActiveRideMetrics extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
             ),
-            BlocBuilder<RideActivityCubit, RideActivityState>(
-              builder: (context, state) {
+            BlocListener<RideActivityCubit, RideActivityState>(
+              listener: ((context, state) {
+                // TODO: DEBUG ONLY
                 if (state is RideActivityNewRideInProgress) {
-                  switch (metric) {
-                    case constants.RideActivityMetrics.accelerometerX:
-                      metricValue = state.newSensorData.accelerometerX
-                              ?.toStringAsFixed(3) ??
-                          "0";
-                      metricUnit = 'm/s2';
-                      break;
-
-                    case constants.RideActivityMetrics.timeElapsed:
-                      metricValue = formatDuration(
-                          state.newSensorData.elapsedSeconds ??
-                              const Duration());
-                      break;
-
-                    case constants.RideActivityMetrics.avgSpeed:
-                      metricValue = state.rideData.avgSpeed.toStringAsFixed(1);
-                      metricUnit = 'km/hr';
-                      break;
-
-                    case constants.RideActivityMetrics.avgMovingSpeed:
-                      metricValue =
-                          state.rideData.avgMovingSpeed.toStringAsFixed(1);
-                      metricUnit = 'km/hr';
-                      break;
-
-                    case constants.RideActivityMetrics.distance:
-                      metricValue = state.rideData.distance.toStringAsFixed(2);
-                      metricUnit = 'km';
-                      break;
-
-                    default:
-                      metricValue = DateFormat.Hms()
-                          .format(state.newSensorData.timestamp);
-                      break;
+                  if ((state.rideData.observations % 1000) == 0) {
+                    context
+                        .read<RideActivityCubit>()
+                        .rideDataRepository
+                        .dumpToLocalStorage(
+                            "AUTO${state.rideData.observations ~/ 1000}");
                   }
-
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Text('$metricValue ${metricUnit ?? ''}'),
-                  );
-                } else {
-                  return Container();
                 }
-              },
+                // TODO: DEBUG ONLY
+              }),
+              child: BlocBuilder<RideActivityCubit, RideActivityState>(
+                builder: (context, state) {
+                  if (state is RideActivityNewRideInProgress) {
+                    switch (metric) {
+                      case constants.RideActivityMetrics.accelerometerX:
+                        metricValue = state.newSensorData.accelerometerX
+                                ?.toStringAsFixed(3) ??
+                            "0";
+                        metricUnit = 'm/s2';
+                        break;
+
+                      case constants.RideActivityMetrics.timeElapsed:
+                        metricValue = formatDuration(
+                            state.newSensorData.elapsedSeconds ??
+                                const Duration());
+                        break;
+
+                      case constants.RideActivityMetrics.avgSpeed:
+                        metricValue =
+                            state.rideData.avgSpeed.toStringAsFixed(1);
+                        metricUnit = 'km/hr';
+                        break;
+
+                      case constants.RideActivityMetrics.avgMovingSpeed:
+                        metricValue =
+                            state.rideData.avgMovingSpeed.toStringAsFixed(1);
+                        metricUnit = 'km/hr';
+                        break;
+
+                      case constants.RideActivityMetrics.distance:
+                        metricValue =
+                            state.rideData.distance.toStringAsFixed(2);
+                        metricUnit = 'km';
+                        break;
+
+                      default:
+                        metricValue = DateFormat.Hms()
+                            .format(state.newSensorData.timestamp);
+                        break;
+                    }
+
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: Text('$metricValue ${metricUnit ?? ''}'),
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              ),
             ),
           ],
         ),

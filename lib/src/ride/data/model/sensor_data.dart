@@ -7,6 +7,10 @@ class SensorData {
     this.accelerometerX,
     this.accelerometerY,
     this.accelerometerZ,
+    this.rotationX,
+    this.rotationY,
+    this.rotationZ,
+    this.rotationW,
     this.locationLat,
     this.locationLong,
     this.locationUpdated,
@@ -22,6 +26,10 @@ class SensorData {
   late double? accelerometerX;
   late double? accelerometerY;
   late double? accelerometerZ;
+  late double? rotationX;
+  late double? rotationY;
+  late double? rotationZ;
+  late double? rotationW;
   late double? locationLat;
   late double? locationLong;
   late bool? locationUpdated;
@@ -37,6 +45,10 @@ class SensorData {
     gyroscopeX = _jsonValueToDouble(json['gyroscopeX']);
     gyroscopeY = _jsonValueToDouble(json['gyroscopeY']);
     gyroscopeZ = _jsonValueToDouble(json['gyroscopeZ']);
+    rotationX = _jsonValueToDouble(json['rotationX']);
+    rotationY = _jsonValueToDouble(json['rotationY']);
+    rotationZ = _jsonValueToDouble(json['rotationZ']);
+    rotationW = _jsonValueToDouble(json['rotationW']);
   }
 
   Map<String, dynamic> toJson() {
@@ -50,6 +62,10 @@ class SensorData {
       'accelerometerX': accelerometerX,
       'accelerometerY': accelerometerY,
       'accelerometerZ': accelerometerZ,
+      'rotationX': rotationX,
+      'rotationY': rotationY,
+      'rotationZ': rotationZ,
+      'rotationW': rotationW,
       'locationLat': locationLat,
       'locationLong': locationLong
     };

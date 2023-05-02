@@ -18,6 +18,14 @@ class ProfileAPI {
   Future<ProfileAPIResponse> getUserProfile() async {
     RideScore userScore;
     UserLifetimeStats userStats;
+    final Map<String, dynamic> userInfo;
+
+    final responseInfo = await client.get(Uri.parse('$apiDomain/profile/info'));
+    if (responseInfo.statusCode == 200) {
+      userInfo = jsonDecode(responseInfo.body);
+    } else {
+      return ProfileAPIResponse(responseInfo.statusCode, responseInfo.body);
+    }
 
     final responseScore =
         await client.get(Uri.parse('$apiDomain/profile/score'));
@@ -36,8 +44,8 @@ class ProfileAPI {
     }
 
     RegisteredUser user = RegisteredUser(
-      userId: 'demo_user',
-      username: 'Demo User',
+      userId: userInfo["userAlias"],
+      username: userInfo["userAlias"],
       scores: userScore,
       stats: userStats,
     );
